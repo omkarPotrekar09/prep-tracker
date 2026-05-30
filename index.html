@@ -185,20 +185,22 @@ body::after {
 /* Bay Area: Karl the Fog */
 .bg-fog {
   position: fixed;
-  bottom: 0; left: -15%; right: -15%;
-  height: 200px;
+  bottom: 0; left: -20%; right: -20%;
+  height: 260px;
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 30% 100%, rgba(80,100,170,0.07) 0%, transparent 70%),
-    radial-gradient(ellipse 70% 50% at 70% 100%, rgba(90,110,180,0.05) 0%, transparent 70%),
-    linear-gradient(180deg, transparent 0%, rgba(60,80,140,0.06) 60%, rgba(40,60,120,0.1) 100%);
-  animation: fog-breathe 25s ease-in-out infinite alternate;
+    radial-gradient(ellipse 90% 55% at 20% 100%, rgba(180,200,230,0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 45% at 60% 100%, rgba(160,185,220,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 40% at 90% 100%, rgba(170,195,228,0.12) 0%, transparent 65%),
+    linear-gradient(180deg, transparent 0%, rgba(140,165,210,0.08) 55%, rgba(120,148,200,0.18) 100%);
+  filter: blur(18px);
+  animation: fog-drift 30s ease-in-out infinite alternate;
 }
 
-@keyframes fog-breathe {
-  from { opacity: 0.5; transform: translateX(-4%); }
-  to   { opacity: 1;   transform: translateX(4%); }
+@keyframes fog-drift {
+  from { opacity: 0.6; transform: translateX(-5%); }
+  to   { opacity: 1;   transform: translateX(5%); }
 }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
@@ -625,7 +627,7 @@ mark { background: var(--amber-dim); color: var(--amber); border-radius: 2px; pa
         <stop offset="100%" stop-color="rgba(40,60,130,0.09)"/>
       </linearGradient>
     </defs>
-    <g stroke="rgba(120,140,210,0.14)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="rgba(188,74,48,0.22)" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <!-- Side approach cables -->
       <path d="M0,114 L290,32" stroke-width="1.5"/>
       <path d="M1200,114 L910,32" stroke-width="1.5"/>
@@ -635,14 +637,14 @@ mark { background: var(--amber-dim); color: var(--amber); border-radius: 2px; pa
       <path d="M290,30 Q600,152 910,30" stroke-width="2.2"/>
 
       <!-- Left tower -->
-      <rect x="283" y="30" width="14" height="150" rx="2" fill="rgba(90,110,180,0.07)" stroke="rgba(130,150,220,0.18)" stroke-width="1.2"/>
-      <rect x="281" y="66" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
-      <rect x="281" y="108" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
+      <rect x="283" y="30" width="14" height="150" rx="2" fill="rgba(160,60,40,0.12)" stroke="rgba(200,80,52,0.30)" stroke-width="1.2"/>
+      <rect x="281" y="66" width="18" height="7" rx="1.5" fill="rgba(160,60,40,0.14)" stroke="rgba(200,80,52,0.30)" stroke-width="0.9"/>
+      <rect x="281" y="108" width="18" height="7" rx="1.5" fill="rgba(160,60,40,0.14)" stroke="rgba(200,80,52,0.30)" stroke-width="0.9"/>
 
       <!-- Right tower -->
-      <rect x="903" y="30" width="14" height="150" rx="2" fill="rgba(90,110,180,0.07)" stroke="rgba(130,150,220,0.18)" stroke-width="1.2"/>
-      <rect x="901" y="66" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
-      <rect x="901" y="108" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
+      <rect x="903" y="30" width="14" height="150" rx="2" fill="rgba(160,60,40,0.12)" stroke="rgba(200,80,52,0.30)" stroke-width="1.2"/>
+      <rect x="901" y="66" width="18" height="7" rx="1.5" fill="rgba(160,60,40,0.14)" stroke="rgba(200,80,52,0.30)" stroke-width="0.9"/>
+      <rect x="901" y="108" width="18" height="7" rx="1.5" fill="rgba(160,60,40,0.14)" stroke="rgba(200,80,52,0.30)" stroke-width="0.9"/>
 
       <!-- Suspender cables (y = 30 + 244·t·(1−t), t = (x−290)/620) -->
       <line x1="325" y1="43" x2="325" y2="180" stroke-width="0.75"/>
