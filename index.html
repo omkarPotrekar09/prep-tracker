@@ -109,6 +109,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'cv11', 'ss01', 'liga' 1;
+  font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
 }
 
@@ -310,7 +311,8 @@ body::after {
 .filter-chip {
   font-size: 11px; padding: 3px 10px; border-radius: 99px;
   border: 1px solid var(--border); background: var(--surface);
-  color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: var(--mono);
+  color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: var(--sans);
+  font-weight: 500; letter-spacing: 0.02em;
 }
 .filter-chip.f-key.on { background: var(--blue-dim); border-color: rgba(77,159,255,0.3); color: var(--blue); }
 .filter-chip.f-easy.on { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
@@ -323,10 +325,10 @@ kbd { font-size: 10px; padding: 1px 5px; border-radius: 3px; border: 1px solid v
 /* ── Phase tabs ──────────────────────────────────────────── */
 .phase-tabs { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .phase-tab {
-  font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 99px;
+  font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 99px;
   border: 1px solid var(--border); background: var(--surface);
-  color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: var(--mono);
-  display: flex; align-items: center; gap: 5px;
+  color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: var(--sans);
+  display: flex; align-items: center; gap: 5px; letter-spacing: 0.01em;
 }
 .phase-tab:hover { border-color: var(--border2); color: var(--text); }
 .phase-tab.active { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); box-shadow: 0 0 12px rgba(0,229,176,0.12); }
@@ -342,11 +344,11 @@ kbd { font-size: 10px; padding: 1px 5px; border-radius: 3px; border: 1px solid v
 .section-header {
   display: flex; align-items: center; gap: 8px;
   font-size: 11px; font-weight: 600; color: var(--text2);
-  text-transform: uppercase; letter-spacing: 0.08em;
+  text-transform: uppercase; letter-spacing: 0.1em;
   margin-bottom: 8px; padding: 7px 12px;
   background: var(--surface2); border-radius: var(--radius);
   border: 1px solid var(--border);
-  font-family: var(--mono); cursor: pointer; user-select: none;
+  font-family: var(--sans); cursor: pointer; user-select: none;
   transition: all 0.12s;
 }
 .section-header:hover { color: var(--text); border-color: var(--border2); }
@@ -358,7 +360,7 @@ kbd { font-size: 10px; padding: 1px 5px; border-radius: 3px; border: 1px solid v
 .section-badge {
   margin-left: auto; font-size: 10px; padding: 1px 8px;
   border-radius: 99px; background: var(--surface3); color: var(--text3);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border); font-family: var(--mono); font-weight: 500;
 }
 .section-body {
   display: grid; grid-template-rows: 1fr;
