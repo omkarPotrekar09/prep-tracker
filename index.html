@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omkar — Interview Prep Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d12;
+  --surface: #13131a;
+  --surface2: #1a1a24;
+  --surface3: #20202e;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #e8e8f0;
+  --text2: #8888a8;
+  --text3: #4a4a6a;
+  --accent: #00d4a0;
+  --accent-dim: rgba(0,212,160,0.1);
+  --accent-border: rgba(0,212,160,0.3);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.1);
+  --blue: #4d9fff;
+  --blue-dim: rgba(77,159,255,0.1);
+  --red: #ff6b6b;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Subtle grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
+
+/* Header */
+.header { margin-bottom: 2rem; }
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.logo { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 6px; }
+.title { font-size: 24px; font-weight: 600; color: var(--text); }
+.subtitle { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.timeline-badge {
+  font-family: var(--mono); font-size: 11px; padding: 6px 14px;
+  border: 1px solid var(--accent-border); border-radius: var(--radius);
+  color: var(--accent); background: var(--accent-dim); white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* Stats */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+.stat {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+}
+.stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-family: var(--mono); }
+.stat-val { font-size: 28px; font-weight: 600; color: var(--text); font-family: var(--mono); }
+.stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+.progress-bar-wrap { height: 3px; background: var(--surface3); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.5s ease; }
+
+/* Nav tabs */
+.nav-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+.nav-tab {
+  font-size: 13px; font-weight: 500; padding: 10px 20px; cursor: pointer;
+  color: var(--text2); border-bottom: 2px solid transparent;
+  background: none; border-top: none; border-left: none; border-right: none;
+  transition: all 0.15s; font-family: var(--sans);
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Views */
+.view { display: none; }
+.view.visible { display: block; }
+
+/* Phase tabs */
+.phase-tabs { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.phase-tab {
+  font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 99px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text2); cursor: pointer; transition: all 0.15s;
+  font-family: var(--mono);
+}
+.phase-tab:hover { border-color: var(--border2); color: var(--text); }
+.phase-tab.active { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
+
+/* Phases */
+.phase { display: none; }
+.phase.visible { display: block; }
+
+/* Sections */
+.section { margin-bottom: 1.5rem; }
+.section-header {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 6px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+}
+.section-badge {
+  margin-left: auto; font-size: 10px; padding: 1px 8px;
+  border-radius: 99px; background: var(--surface2); color: var(--text3);
+  border: 1px solid var(--border);
+}
+
+/* Items */
+.item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 10px; border-radius: var(--radius); cursor: pointer;
+  transition: background 0.12s; border: 1px solid transparent;
+  margin-bottom: 2px;
+}
+.item:hover { background: var(--surface2); }
+.item.done { background: var(--accent-dim); border-color: var(--accent-border); }
+
+.item-check {
+  width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; margin-top: 2px;
+  border: 1.5px solid var(--border2); background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.item.done .item-check { background: var(--accent); border-color: var(--accent); }
+.checkmark { display: none; }
+.item.done .checkmark { display: block; }
+
+.item-body { flex: 1; min-width: 0; }
+.item-name { font-size: 13px; color: var(--text); line-height: 1.4; }
+.item.done .item-name { color: var(--text2); text-decoration: line-through; text-decoration-color: var(--text3); }
+.item-meta { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
+
+.tag { font-size: 10px; padding: 1px 7px; border-radius: 4px; margin-left: 6px; display: inline-block; vertical-align: middle; font-family: var(--mono); }
+.tag-key { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(77,159,255,0.2); }
+.tag-easy { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+.tag-med { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.2); }
+
+.item-del {
+  font-size: 14px; color: var(--text3); padding: 2px 4px;
+  border-radius: 4px; opacity: 0; transition: opacity 0.15s;
+  cursor: pointer; flex-shrink: 0; background: none; border: none;
+  line-height: 1;
+}
+.item:hover .item-del { opacity: 1; }
+.item-del:hover { color: var(--red); background: rgba(255,107,107,0.1); }
+
+/* Add form */
+.add-form {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.add-form-title { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 1rem; font-family: var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
+.add-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.add-row2 { display: grid; grid-template-columns: 1fr 1fr 80px auto; gap: 8px; }
+.add-form input, .add-form select {
+  font-size: 13px; padding: 7px 12px;
+  border-radius: var(--radius); border: 1px solid var(--border2);
+  background: var(--surface2); color: var(--text);
+  font-family: var(--sans); width: 100%;
+  transition: border-color 0.15s;
+}
+.add-form input:focus, .add-form select:focus { outline: none; border-color: var(--accent); }
+.add-form input::placeholder { color: var(--text3); }
+.add-form select option { background: var(--surface2); }
+.add-btn {
+  font-size: 12px; font-weight: 500; padding: 7px 18px;
+  border-radius: var(--radius); border: 1px solid var(--accent-border);
+  background: var(--accent-dim); color: var(--accent); cursor: pointer;
+  font-family: var(--mono); white-space: nowrap; transition: all 0.15s;
+}
+.add-btn:hover { background: var(--accent); color: #000; }
+
+/* Revision */
+.rev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+.rev-section-title {
+  font-size: 10px; font-weight: 500; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--mono);
+  margin-bottom: 10px; margin-top: 1.5rem;
+}
+.rev-section-title:first-child { margin-top: 0; }
+.rev-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+}
+.rev-card-title {
+  font-size: 12px; font-weight: 500; color: var(--accent);
+  margin-bottom: 0.75rem; padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border); font-family: var(--mono);
+  letter-spacing: 0.03em;
+}
+.rev-item {
+  font-size: 12px; color: var(--text2); padding: 4px 0;
+  border-bottom: 1px solid var(--border); line-height: 1.5;
+}
+.rev-item:last-child { border-bottom: none; }
+.rev-item strong { color: var(--text); font-weight: 500; }
+.rev-item code { font-family: var(--mono); font-size: 11px; color: var(--accent); background: var(--surface2); padding: 1px 5px; border-radius: 3px; }
+.rev-code {
+  font-family: var(--mono); font-size: 11px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 8px 10px; margin-top: 6px;
+  color: var(--text2); line-height: 1.7; white-space: pre; overflow-x: auto;
+}
+.rev-code .kw { color: var(--blue); }
+.rev-code .acc { color: var(--accent); }
+.rev-code .cm { color: var(--text3); }
+
+.checklist-step { display: flex; gap: 8px; font-size: 12px; color: var(--text2); padding: 4px 0; border-bottom: 1px solid var(--border); }
+.checklist-step:last-child { border-bottom: none; }
+.step-num { font-family: var(--mono); font-size: 10px; color: var(--accent); flex-shrink: 0; margin-top: 2px; min-width: 16px; }
+
+.story-item { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text2); }
+.story-item:last-child { border-bottom: none; }
+.story-item strong { color: var(--text); font-weight: 500; }
+.story-status { font-family: var(--mono); font-size: 10px; margin-right: 6px; }
+.s-done { color: var(--accent); }
+.s-prog { color: var(--amber); }
+.s-todo { color: var(--text3); }
+
+@media (max-width: 640px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .rev-grid { grid-template-columns: 1fr; }
+  .add-row2 { grid-template-columns: 1fr 1fr; }
+  .add-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="logo">// interview prep</div>
+      <div class="title">Omkar Potrekar</div>
+      <div class="subtitle">Embedded · Platform · Silicon — Senior / Staff level</div>
+    </div>
+    <div class="timeline-badge">June → August 2026</div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-label">total</div>
+    <div class="stat-val" id="s-total">0</div>
+    <div class="stat-sub">topics across all phases</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">done</div>
+    <div class="stat-val" id="s-done">0</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="s-bar" style="width:0%"></div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">progress</div>
+    <div class="stat-val" id="s-pct">0%</div>
+    <div class="stat-sub">overall completion</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">remaining</div>
+    <div class="stat-val" id="s-rem">0</div>
+    <div class="stat-sub">to go</div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" data-view="tracker">Tracker</button>
+  <button class="nav-tab" data-view="revision">Revision notes</button>
+</div>
+
+<!-- TRACKER VIEW -->
+<div class="view visible" id="view-tracker">
+
+  <div class="add-form">
+    <div class="add-form-title">+ add custom topic</div>
+    <div class="add-row">
+      <input id="add-name" placeholder="Topic name (e.g. PCIe Gen4 signal integrity)" />
+      <input id="add-meta" placeholder="File path or notes (optional)" />
+    </div>
+    <div class="add-row2">
+      <select id="add-phase">
+        <option value="c_fund">C Fundamentals</option>
+        <option value="cpp">C++ Fundamentals</option>
+        <option value="dsa">DSA</option>
+        <option value="comp_arch">Comp Arch</option>
+        <option value="embedded">Embedded</option>
+        <option value="protocols">Protocols</option>
+        <option value="behavioral">Behavioral</option>
+        <option value="mock">Mock Interviews</option>
+        <option value="custom">Custom</option>
+      </select>
+      <input id="add-section" placeholder="Section (optional)" />
+      <select id="add-tag">
+        <option value="">tag</option>
+        <option value="key">key</option>
+        <option value="easy">easy</option>
+        <option value="med">med</option>
+      </select>
+      <button class="add-btn" id="add-btn">+ Add</button>
+    </div>
+  </div>
+
+  <div class="phase-tabs" id="phase-tabs"></div>
+  <div id="phases-container"></div>
+</div>
+
+<!-- REVISION VIEW -->
+<div class="view" id="view-revision">
+
+  <div class="rev-section-title">Memory model</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">memory layout</div>
+      <div class="rev-item"><strong>Stack</strong> — local vars, return addrs, grows down. ~8KB/thread default</div>
+      <div class="rev-item"><strong>Heap</strong> — malloc/free, grows up. Manual management required</div>
+      <div class="rev-item"><strong>.data</strong> — initialized globals: <code>static int x = 10</code></div>
+      <div class="rev-item"><strong>.bss</strong> — zero-init globals: <code>static int x;</code> no space in binary</div>
+      <div class="rev-item"><strong>.text</strong> — read-only code segment</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">memory bugs quick ref</div>
+      <div class="rev-item"><strong>Stack overflow</strong> — canary value at bottom, watermark pattern</div>
+      <div class="rev-item"><strong>Heap fragmentation</strong> — fixed-size memory pools eliminate it</div>
+      <div class="rev-item"><strong>Buffer overflow</strong> — use strncpy, snprintf; detect with ASan</div>
+      <div class="rev-item"><strong>Use after free</strong> — set ptr = NULL after free(). ASan catches it</div>
+      <div class="rev-item"><strong>Memory leak</strong> — goto cleanup in C; RAII / unique_ptr in C++</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">C / C++ essentials</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">pointer rules</div>
+      <div class="rev-item"><code>int *p</code> — pointer to int (data mutable)</div>
+      <div class="rev-item"><code>const int *p</code> — pointer to const int (data immutable)</div>
+      <div class="rev-item"><code>int * const p</code> — const pointer to int (pointer immutable)</div>
+      <div class="rev-item"><strong>volatile</strong> — prevents compiler optimizing away MMIO reads/writes</div>
+      <div class="rev-item"><strong>volatile ≠ atomic</strong> — no CPU reordering protection. Need barriers</div>
+      <div class="rev-code"><span class="cm">/* bit manipulation pattern */</span>
+reg |=  (1 << 3);   <span class="cm">// set bit 3</span>
+reg &= ~(1 << 3);   <span class="cm">// clear bit 3</span>
+reg ^=  (1 << 3);   <span class="cm">// toggle bit 3</span>
+val = (reg >> 3) & 0x7; <span class="cm">// extract [5:3]</span></div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">C++ smart pointers + RAII</div>
+      <div class="rev-item"><strong>unique_ptr</strong> — sole ownership, no copy, move-only. Use by default</div>
+      <div class="rev-item"><strong>shared_ptr</strong> — shared ownership, ref counted. Use when shared</div>
+      <div class="rev-item"><strong>weak_ptr</strong> — observe shared_ptr without owning. Break cycles</div>
+      <div class="rev-item"><strong>RAII</strong> — acquire in ctor, release in dtor. No leaks on exception</div>
+      <div class="rev-code"><span class="kw">auto</span> p = std::make_unique&lt;uint8_t[]&gt;(64);
+<span class="cm">// freed automatically on scope exit</span>
+<span class="cm">// even if exception is thrown</span>
+
+<span class="kw">class</span> Lock {
+  Lock()  { mutex_acquire(); }
+  ~Lock() { mutex_release(); } <span class="cm">// RAII</span>
+};</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Protocol cheat sheet</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">I2C key facts</div>
+      <div class="rev-item"><strong>2 wires</strong> — SCL clock, SDA data. Open-drain + pull-up resistors</div>
+      <div class="rev-item"><strong>Speeds</strong> — 100kHz / 400kHz / 1MHz / 3.4MHz HS mode</div>
+      <div class="rev-item"><strong>ACK</strong> — receiver pulls SDA low after each byte. NACK = high</div>
+      <div class="rev-item"><strong>NACK causes</strong> — wrong addr, device busy, bad register, power issue</div>
+      <div class="rev-item"><strong>Bus stuck low</strong> — send 9 clock pulses to recover (i2c_recover_bus)</div>
+      <div class="rev-item"><strong>Repeated START</strong> — write reg addr then read without releasing bus</div>
+      <div class="rev-code">i2cdetect -y 1          <span class="cm"># find all devices</span>
+i2cdump -y 1 0x40       <span class="cm"># dump all registers</span>
+i2cget -y 1 0x40 0x8B w <span class="cm"># read word</span>
+i2cset -y 1 0x40 0x01 0x80 <span class="cm"># write</span></div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">PCIe key facts</div>
+      <div class="rev-item"><strong>LTSSM</strong> — Detect → Polling → Config → L0 (active link)</div>
+      <div class="rev-item"><strong>PERST#</strong> — reset signal, must deassert before link can form</div>
+      <div class="rev-item"><strong>REFCLK</strong> — 100MHz reference clock, required for link training</div>
+      <div class="rev-item"><strong>BAR</strong> — base address register, OS allocates memory space</div>
+      <div class="rev-item"><strong>AER</strong> — advanced error reporting: correctable vs uncorrectable</div>
+      <div class="rev-item"><strong>MSI-X</strong> — message signaled interrupts, preferred over legacy INTx</div>
+      <div class="rev-code">lspci -vvv              <span class="cm"># enumerate all devices</span>
+dmesg | grep -i pcie    <span class="cm"># link state messages</span>
+dmesg | grep -i aer     <span class="cm"># error events</span>
+setpci -s 0:1.0 COMMAND=0x06 <span class="cm"># enable device</span></div>
+    </div>
+  </div>
+
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">SPI key facts</div>
+      <div class="rev-item"><strong>4 wires</strong> — SCLK, MOSI, MISO, CS. Full duplex</div>
+      <div class="rev-item"><strong>CPOL</strong> — clock polarity. 0 = idle low, 1 = idle high</div>
+      <div class="rev-item"><strong>CPHA</strong> — clock phase. 0 = sample on 1st edge, 1 = 2nd edge</div>
+      <div class="rev-item"><strong>Mode 0</strong> — CPOL=0, CPHA=0. Most common</div>
+      <div class="rev-item"><strong>CS timing</strong> — CS must assert before and deassert after transfer</div>
+      <div class="rev-item"><strong>No ACK</strong> — no built-in acknowledgment, master drives all timing</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">SMBus / PMBus key facts</div>
+      <div class="rev-item"><strong>SMBus</strong> — subset of I2C with timeouts, PEC, fixed voltage levels</div>
+      <div class="rev-item"><strong>PMBus</strong> — power management protocol built on SMBus</div>
+      <div class="rev-item"><strong>READ_VOUT 0x8B</strong> — read output voltage (linear11 encoding)</div>
+      <div class="rev-item"><strong>VOUT_COMMAND 0x21</strong> — set target output voltage</div>
+      <div class="rev-item"><strong>STATUS_WORD 0x79</strong> — fault summary register, check first</div>
+      <div class="rev-item"><strong>OPERATION 0x01</strong> — turn rail on/off</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Debug checklists</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">PCIe not enumerating</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Power rail — PCIe power present and stable?</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>PERST# — reset deasserted correctly?</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>REFCLK — 100MHz reference clock present?</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>LTSSM — stuck in Detect or Polling?</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>Config space — can you read Vendor/Device ID?</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>BAR — did OS allocate address space?</span></div>
+      <div class="checklist-step"><span class="step-num">7</span><span>Driver probe — did probe() get called?</span></div>
+      <div class="checklist-step"><span class="step-num">8</span><span>AER logs — correctable/uncorrectable errors in dmesg?</span></div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">boot hang — no UART</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Power rails — all required rails present and sequenced?</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>Reset — RESET_N deasserted at correct time?</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>Clock — boot clock source present and locked?</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>Boot ROM — executing? Attach JTAG to verify</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>BL1 — flash accessible? CRC valid?</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>DDR init — training passing? Silent hang common here</span></div>
+      <div class="checklist-step"><span class="step-num">7</span><span>UART init — baud rate and pinmux before first print?</span></div>
+      <div class="checklist-step"><span class="step-num">8</span><span>Watchdog — disabled or kicking during bring-up?</span></div>
+    </div>
+  </div>
+
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">DMA corruption</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Cache clean before DMA write (CPU → device)</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>Cache invalidate before DMA read (device → CPU)</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>Write barrier before ringing the doorbell</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>Read barrier after completion flag</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>Descriptor ownership bit set correctly before submit?</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>Buffer alignment meets DMA requirements?</span></div>
+      <div class="checklist-step"><span class="step-num">7</span><span>Coherent vs non-coherent — correct mapping type?</span></div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">system resets randomly</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Reset reason register — WDT, panic, thermal, external?</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>PMIC logs — power droop or overcurrent event?</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>Watchdog — is WDT being kicked properly?</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>Kernel panic — check retention memory for last oops</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>Thermal — hitting throttle or shutdown threshold?</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>External reset — RESET_N being asserted externally?</span></div>
+      <div class="checklist-step"><span class="step-num">7</span><span>Reproduce under load — correlate with activity type</span></div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">DSA & interview mindset</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">complexity reference</div>
+      <div class="rev-item"><strong>Two pointer</strong> — O(n) time · O(1) space</div>
+      <div class="rev-item"><strong>Hash map lookup</strong> — O(1) avg time · O(n) space</div>
+      <div class="rev-item"><strong>Binary search</strong> — O(log n) time · O(1) space</div>
+      <div class="rev-item"><strong>Merge sort</strong> — O(n log n) time · O(n) space</div>
+      <div class="rev-item"><strong>Quicksort</strong> — O(n log n) avg · O(n²) worst case</div>
+      <div class="rev-item"><strong>BFS / DFS</strong> — O(V+E) time · O(V) space</div>
+      <div class="rev-item"><strong>Linked list reversal</strong> — O(n) time · O(1) space</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">interview answer order</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Clarify the environment and constraints first</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>Identify the layer — HW / FW / SW / OS</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>Gather signals before forming a hypothesis</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>State hypothesis — explain the reasoning</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>Validate — never jump straight to the fix</span></div>
+      <div class="rev-item" style="margin-top:8px"><strong>NVIDIA</strong> — say "I don't know" clearly. Bluffing is penalized</div>
+      <div class="rev-item"><strong>Never</strong> say "it just worked" — always explain why</div>
+      <div class="rev-item"><strong>Never</strong> stay silent when stuck — think out loud</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Behavioral stories</div>
+  <div class="rev-card" style="margin-bottom:1.5rem">
+    <div class="rev-card-title">your 7 stories — status</div>
+    <div class="story-item"><span class="story-status s-done">✅</span><strong>DDR instability</strong> — 10–15% flash fail → 100%. Bit-flip pattern → DDR freq-dependent at 547MHz. ~1 month. STAR structured.</div>
+    <div class="story-item"><span class="story-status s-prog">🔄</span><strong>MTE bug</strong> — looked like HW, turned out to be SW. Details to fill in.</div>
+    <div class="story-item"><span class="story-status s-prog">🔄</span><strong>Agent Nexus</strong> — LLM review pipeline for XML-based software image configs. 1 day → 3 hrs. Framed, not yet timed.</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>CI/CD automation</strong> — platform-wide build/flash/validation framework. ~10,000+ engineering hours saved annually.</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Cross-team escalation</strong> — 10+ engineers, 3 concurrent programs. Leadership without title.</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Release criteria definition</strong> — go/no-go framework adopted org-wide. 20+ external releases shipped.</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Production blocker</strong> — primary escalation point across 3 programs. Boot hang, kernel panic, init failures.</div>
+  </div>
+
+</div><!-- end revision -->
+
+</div><!-- end container -->
+
+<script>
+const PHASES = [
+  { id:'c_fund', label:'C Fundamentals', sections:[
+    { name:'Pointers & memory', items:[
+      {id:'m1',name:'Stack vs heap, .data, .bss layout',meta:'c_fundamentals/memory/memory_layout.c',done:true},
+      {id:'m2',name:'Pointers: &, *, ->, pointer arithmetic',meta:'c_fundamentals/pointers/pointer_basics.c',done:true},
+      {id:'m3',name:'Output parameters pattern',meta:'c_fundamentals/pointers/output_params.c',done:true},
+      {id:'m4',name:'Array as pointer — arr[i] = *(arr+i)',meta:'c_fundamentals/arrays/array_as_pointer.c'},
+      {id:'m5',name:'MMIO hardware register access via pointer',meta:'c_fundamentals/pointers/mmio_access.c'},
+      {id:'m6',name:'malloc/free + goto cleanup pattern',meta:'c_fundamentals/memory/dynamic_alloc.c'},
+    ]},
+    { name:'Static / const / volatile', items:[
+      {id:'scv1',name:'static inside vs outside function',meta:'c_fundamentals/static_const_volatile/static_demo.c'},
+      {id:'scv2',name:'const pointer vs pointer to const',meta:'c_fundamentals/static_const_volatile/const_demo.c'},
+      {id:'scv3',name:'volatile for MMIO — why it matters in drivers',meta:'c_fundamentals/static_const_volatile/volatile_mmio.c'},
+      {id:'scv4',name:'volatile vs atomics — acquire/release ordering',meta:'c_fundamentals/static_const_volatile/atomics_demo.c'},
+    ]},
+    { name:'Bit manipulation', items:[
+      {id:'b1',name:'Set / clear / toggle bits',meta:'c_fundamentals/bit_manipulation/bit_ops.c',tag:'key'},
+      {id:'b2',name:'Extract bitfields with mask + shift',meta:'c_fundamentals/bit_manipulation/bitfields.c'},
+      {id:'b3',name:'W1C pattern — write 1 to clear (HW registers)',meta:'c_fundamentals/bit_manipulation/w1c.c',tag:'key'},
+      {id:'b4',name:'Operator precedence traps: & vs ==',meta:'c_fundamentals/bit_manipulation/precedence.c'},
+    ]},
+    { name:'Strings & arrays', items:[
+      {id:'sa1',name:'Reverse array in-place (two-pointer warm-up)',meta:'c_fundamentals/arrays/reverse_array.c'},
+      {id:'sa2',name:'is_palindrome two-pointer',meta:'c_fundamentals/arrays/is_palindrome.c',done:true},
+      {id:'sa3',name:'String manipulation without stdlib',meta:'c_fundamentals/strings/string_ops.c'},
+      {id:'sa4',name:'Ring buffer — rb_init/push/pop/peek',meta:'c_fundamentals/structs/ring_buffer.c',done:true},
+    ]},
+  ]},
+  { id:'cpp', label:'C++', sections:[
+    { name:'OOP core', items:[
+      {id:'cpp1',name:'Classes, constructors, destructors',meta:'cpp_fundamentals/classes/class_basics.cpp'},
+      {id:'cpp2',name:'RAII — resource acquisition is initialization',meta:'cpp_fundamentals/raii/raii_demo.cpp',tag:'key'},
+      {id:'cpp3',name:'Virtual functions and vtable mechanics',meta:'cpp_fundamentals/virtual_functions/vtable_demo.cpp'},
+      {id:'cpp4',name:'Implement stack as a class with test cases',meta:'cpp_fundamentals/classes/stack_class.cpp'},
+    ]},
+    { name:'Modern C++', items:[
+      {id:'cpp5',name:'unique_ptr and shared_ptr — when to use each',meta:'cpp_fundamentals/smart_pointers/smart_ptr_demo.cpp',tag:'key'},
+      {id:'cpp6',name:'Move semantics and rvalue references',meta:'cpp_fundamentals/move_semantics/move_demo.cpp'},
+      {id:'cpp7',name:'STL: vector, map, unordered_map',meta:'cpp_fundamentals/stl/stl_basics.cpp'},
+      {id:'cpp8',name:'Templates basics',meta:'cpp_fundamentals/templates/template_demo.cpp'},
+    ]},
+  ]},
+  { id:'dsa', label:'DSA', sections:[
+    { name:'Arrays', items:[
+      {id:'ar1',name:'Reverse array (warm-up)',meta:'dsa/arrays/reverse_array.c',tag:'easy'},
+      {id:'ar2',name:'#001 Two Sum — brute force O(n²)',meta:'dsa/arrays/001_two_sum_brute.c',tag:'easy',done:true},
+      {id:'ar3',name:'#001 Two Sum — hash map O(n)',meta:'dsa/arrays/001_two_sum_hash.cpp',tag:'easy'},
+      {id:'ar4',name:'#026 Remove Duplicates from sorted array',meta:'dsa/arrays/026_remove_duplicates.c',tag:'easy'},
+      {id:'ar5',name:'#121 Best Time to Buy and Sell Stock',meta:'dsa/arrays/121_buy_sell_stock.c',tag:'easy'},
+      {id:'ar6',name:'#011 Container With Most Water',meta:'dsa/arrays/011_container_water.c',tag:'med'},
+    ]},
+    { name:'Bit manipulation', items:[
+      {id:'bm1',name:'#136 Single Number (XOR trick)',meta:'dsa/arrays/136_single_number.c',tag:'easy'},
+      {id:'bm2',name:'#191 Number of 1 Bits (Brian Kernighan)',meta:'dsa/arrays/191_count_bits.c',tag:'easy'},
+      {id:'bm3',name:'#190 Reverse Bits',meta:'dsa/arrays/190_reverse_bits.c',tag:'key'},
+    ]},
+    { name:'Strings', items:[
+      {id:'st1',name:'#125 Valid Palindrome',meta:'dsa/strings/125_valid_palindrome.c',tag:'easy'},
+      {id:'st2',name:'#344 Reverse String in-place',meta:'dsa/strings/344_reverse_string.c',tag:'easy'},
+      {id:'st3',name:'#003 Longest Substring Without Repeating',meta:'dsa/strings/003_longest_substring.cpp',tag:'med'},
+    ]},
+    { name:'Linked lists', items:[
+      {id:'ll1',name:'Build linked list from scratch (node, insert, delete, free)',meta:'dsa/linked_lists/linked_list_basics.c'},
+      {id:'ll2',name:'#206 Reverse Linked List',meta:'dsa/linked_lists/206_reverse_list.c',tag:'key'},
+      {id:'ll3',name:'#021 Merge Two Sorted Lists',meta:'dsa/linked_lists/021_merge_sorted.c',tag:'easy'},
+      {id:'ll4',name:'#141 Linked List Cycle (Floyd\'s algorithm)',meta:'dsa/linked_lists/141_cycle_detect.c',tag:'easy'},
+      {id:'ll5',name:'#019 Remove Nth Node From End',meta:'dsa/linked_lists/019_remove_nth.c',tag:'med'},
+    ]},
+    { name:'Stacks & queues', items:[
+      {id:'sq1',name:'Implement stack array-based in C',meta:'dsa/stacks_queues/stack_array.c'},
+      {id:'sq2',name:'#020 Valid Parentheses',meta:'dsa/stacks_queues/020_valid_parens.c',tag:'easy'},
+      {id:'sq3',name:'#622 Design Circular Queue',meta:'dsa/stacks_queues/622_circular_queue.c',tag:'med'},
+      {id:'sq4',name:'#155 Min Stack',meta:'dsa/stacks_queues/155_min_stack.cpp',tag:'med'},
+    ]},
+    { name:'Hash maps', items:[
+      {id:'hm1',name:'#001 Two Sum optimal (unordered_map)',meta:'dsa/hash_maps/001_two_sum_hash.cpp',tag:'easy'},
+      {id:'hm2',name:'#049 Group Anagrams',meta:'dsa/hash_maps/049_group_anagrams.cpp',tag:'med'},
+      {id:'hm3',name:'#146 LRU Cache (map + doubly linked list)',meta:'dsa/hash_maps/146_lru_cache.cpp',tag:'med'},
+    ]},
+    { name:'Sorting & binary search', items:[
+      {id:'so1',name:'Merge sort from scratch',meta:'dsa/sorting/merge_sort.c'},
+      {id:'so2',name:'Quicksort from scratch',meta:'dsa/sorting/quicksort.c'},
+      {id:'so3',name:'Binary search — clean, no off-by-one errors',meta:'dsa/binary_search/binary_search.c'},
+      {id:'so4',name:'#075 Sort Colors (Dutch flag algorithm)',meta:'dsa/sorting/075_sort_colors.c',tag:'med'},
+      {id:'so5',name:'#033 Search in Rotated Sorted Array',meta:'dsa/binary_search/033_search_rotated.c',tag:'med'},
+    ]},
+    { name:'Trees', items:[
+      {id:'tr1',name:'#226 Invert Binary Tree',meta:'dsa/trees/226_invert_tree.cpp',tag:'easy'},
+      {id:'tr2',name:'#104 Maximum Depth of Binary Tree',meta:'dsa/trees/104_max_depth.cpp',tag:'easy'},
+      {id:'tr3',name:'#236 Lowest Common Ancestor',meta:'dsa/trees/236_lca.cpp',tag:'med'},
+    ]},
+  ]},
+  { id:'comp_arch', label:'Comp Arch', sections:[
+    { name:'Pipeline & execution', items:[
+      {id:'ca1',name:'Pipeline stages: IF ID EX MEM WB',meta:'computer_arch/pipeline/pipeline_basics.md'},
+      {id:'ca2',name:'Data, control, structural hazards — stalls and forwarding',meta:'computer_arch/pipeline/hazards.md',tag:'key'},
+      {id:'ca3',name:'Out-of-order execution — ROB, speculative execution',meta:'computer_arch/out_of_order/ooo_basics.md'},
+      {id:'ca4',name:'Spectre/Meltdown — why it happened',meta:'computer_arch/out_of_order/spectre.md'},
+    ]},
+    { name:'Cache & memory', items:[
+      {id:'ca5',name:'Cache hierarchy L1/L2/L3 — hit/miss, eviction policies',meta:'computer_arch/cache_memory/cache_basics.md',tag:'key'},
+      {id:'ca6',name:'Cache coherency — MESI protocol',meta:'computer_arch/cache_memory/mesi_protocol.md',tag:'key'},
+      {id:'ca7',name:'Virtual memory, TLB, page faults',meta:'computer_arch/virtual_memory/vm_basics.md'},
+    ]},
+    { name:'Clock & power', items:[
+      {id:'ca8',name:'Clock gating and power gating',meta:'computer_arch/clock_power/clock_power.md'},
+      {id:'ca9',name:'DVFS — dynamic voltage and frequency scaling',meta:'computer_arch/clock_power/dvfs.md'},
+      {id:'ca10',name:'ARM exception model EL0–EL3',meta:'computer_arch/arm_specifics/exception_levels.md',tag:'key'},
+      {id:'ca11',name:'AXI / AHB / APB — ARM bus protocols',meta:'computer_arch/arm_specifics/arm_buses.md'},
+    ]},
+  ]},
+  { id:'embedded', label:'Embedded', sections:[
+    { name:'Memory issues', items:[
+      {id:'em1',name:'Stack overflow — canary and watermark detection',meta:'embedded_systems/memory_issues/stack_overflow.c',tag:'key'},
+      {id:'em2',name:'Heap fragmentation — fixed-size memory pools',meta:'embedded_systems/memory_issues/memory_pools.c'},
+      {id:'em3',name:'Buffer overflow — safe patterns, ASan detection',meta:'embedded_systems/memory_issues/buffer_overflow.c'},
+      {id:'em4',name:'Use after free — safe_free() NULL pattern',meta:'embedded_systems/memory_issues/use_after_free.c'},
+      {id:'em5',name:'Memory leaks — valgrind, goto cleanup, RAII',meta:'embedded_systems/memory_issues/memory_leaks.c'},
+    ]},
+    { name:'Concurrency', items:[
+      {id:'em6',name:'Race conditions — identify, reproduce, fix',meta:'embedded_systems/concurrency/race_condition.c',tag:'key'},
+      {id:'em7',name:'Deadlock — lock ordering analysis and prevention',meta:'embedded_systems/concurrency/deadlock.c'},
+      {id:'em8',name:'Priority inversion — Mars Pathfinder case study',meta:'embedded_systems/concurrency/priority_inversion.md',tag:'key'},
+      {id:'em9',name:'Interrupt storm — coalescing, bottom-half handlers',meta:'embedded_systems/interrupts/interrupt_storm.md'},
+    ]},
+    { name:'Boot & DMA', items:[
+      {id:'em10',name:'Boot hang debug methodology — 8-step structured answer',meta:'embedded_systems/boot_bringup/boot_hang.md',tag:'key'},
+      {id:'em11',name:'DMA cache coherency — clean vs invalidate, barriers',meta:'embedded_systems/dma/cache_coherency.c',tag:'key'},
+      {id:'em12',name:'FreeRTOS — tasks, scheduler, semaphore vs mutex',meta:'embedded_systems/rtos/freertos_basics.md'},
+    ]},
+  ]},
+  { id:'protocols', label:'Protocols', sections:[
+    { name:'Low-speed buses', items:[
+      {id:'pr1',name:'I2C — open-drain, ACK/NACK, repeated start, bus recovery',meta:'protocols/i2c/',tag:'key'},
+      {id:'pr2',name:'SPI — CPOL/CPHA modes, CS timing, MOSI/MISO',meta:'protocols/spi/'},
+      {id:'pr3',name:'SMBus/PMBus — telemetry, VOUT_COMMAND, STATUS_WORD',meta:'protocols/smbus_pmbus/',tag:'key'},
+      {id:'pr4',name:'UART — baud rate, framing, parity, flow control',meta:'protocols/uart/'},
+      {id:'pr5',name:'I2S — audio protocol, bit clock, word select',meta:'protocols/i2s/'},
+    ]},
+    { name:'High-speed', items:[
+      {id:'pr6',name:'PCIe — LTSSM, enumeration, BAR, AER, MSI-X',meta:'protocols/pcie/',tag:'key'},
+      {id:'pr7',name:'USB — enumeration flow, descriptors, transfer types',meta:'protocols/usb/'},
+      {id:'pr8',name:'NVMe — command queues, PCIe transport, bring-up validation',meta:'protocols/nvme/'},
+    ]},
+  ]},
+  { id:'behavioral', label:'Behavioral', sections:[
+    { name:'Stories — STAR format', items:[
+      {id:'bh1',name:'DDR instability (10–15% flash fail → 100%)',meta:'behavioral/stories/ddr_instability.md',done:true},
+      {id:'bh2',name:'MTE bug (looked like HW, was SW)',meta:'behavioral/stories/mte_story.md'},
+      {id:'bh3',name:'Agent Nexus (LLM pipeline, 1 day → 3 hrs)',meta:'behavioral/stories/agent_nexus.md'},
+      {id:'bh4',name:'CI/CD automation (10,000+ engineering hours saved)',meta:'behavioral/stories/cicd_automation.md'},
+      {id:'bh5',name:'Cross-team escalation (10+ engineers, 3 programs)',meta:'behavioral/stories/cross_team.md'},
+      {id:'bh6',name:'Release criteria definition (20+ external releases)',meta:'behavioral/stories/release_criteria.md'},
+      {id:'bh7',name:'Production blocker unblocked (3 concurrent programs)',meta:'behavioral/stories/production_blocker.md'},
+    ]},
+    { name:'Practice', items:[
+      {id:'bh8',name:'All 7 stories timed under 3 minutes each',meta:'record yourself and play back'},
+      {id:'bh9',name:'Agent Nexus 3-part answer cold — what/validate/manual',meta:'most critical for Silicon Co-Design role'},
+      {id:'bh10',name:'Spoken aloud — not just mentally reviewed',meta:'mock_interviews/behavioral/'},
+    ]},
+  ]},
+  { id:'mock', label:'Mock', sections:[
+    { name:'Technical mocks', items:[
+      {id:'mk1',name:'PCIe not enumerating — structured layered answer',meta:'mock_interviews/technical/'},
+      {id:'mk2',name:'Boot hang no UART — 8-step methodology spoken aloud',meta:'mock_interviews/technical/'},
+      {id:'mk3',name:'DMA corruption — cache coherency debug walkthrough',meta:'mock_interviews/technical/'},
+      {id:'mk4',name:'2 LeetCode mediums back to back in 45 minutes',meta:'mock_interviews/technical/'},
+      {id:'mk5',name:'Full technical mock — C++ + PCIe + one coding problem',meta:'mock_interviews/technical/mock1.md'},
+    ]},
+    { name:'Behavioral mocks', items:[
+      {id:'mk6',name:'Full behavioral mock — all 7 stories back to back',meta:'mock_interviews/behavioral/mock1.md'},
+      {id:'mk7',name:'Silicon Co-Design role-specific full mock',meta:'mock_interviews/technical/silicon_codesign_mock.md'},
+    ]},
+  ]},
+  { id:'custom', label:'Custom', sections:[
+    { name:'My additions', items:[] },
+  ]},
+];
+
+function load(k) { try { return localStorage.getItem(k); } catch(e) { return null; } }
+function save(k,v) { try { localStorage.setItem(k,v); } catch(e) {} }
+
+function isDone(item) { return item.done || load('nv_' + item.id) === '1'; }
+function toggleDone(item, val) { save('nv_' + item.id, val ? '1' : '0'); }
+
+function allItems() {
+  const items = [];
+  PHASES.forEach(p => p.sections.forEach(s => s.items.forEach(i => items.push(i))));
+  return items;
+}
+
+function updateStats() {
+  const items = allItems();
+  const total = items.length;
+  const done = items.filter(isDone).length;
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-rem').textContent = total - done;
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('s-bar').style.width = pct + '%';
+}
+
+function makeSVGCheck() {
+  return `<svg class="checkmark" width="10" height="10" viewBox="0 0 10 10" fill="none">
+    <polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function makeItemEl(item, section, hdrEl) {
+  const el = document.createElement('div');
+  el.className = 'item' + (isDone(item) ? ' done' : '');
+  let tag = item.tag ? `<span class="tag tag-${item.tag}">${item.tag}</span>` : '';
+  const delBtn = item._custom ? `<button class="item-del" title="remove" aria-label="remove item">×</button>` : '';
+  el.innerHTML = `
+    <div class="item-check">${makeSVGCheck()}</div>
+    <div class="item-body">
+      <div class="item-name">${item.name}${tag}</div>
+      ${item.meta ? `<div class="item-meta">${item.meta}</div>` : ''}
+    </div>${delBtn}`;
+
+  el.addEventListener('click', (e) => {
+    if (e.target.closest('.item-del')) return;
+    const nowDone = !el.classList.contains('done');
+    el.classList.toggle('done', nowDone);
+    toggleDone(item, nowDone);
+    updateStats();
+    updateSectionBadge(section, hdrEl);
+  });
+
+  const delEl = el.querySelector('.item-del');
+  if (delEl) {
+    delEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      section.items = section.items.filter(i => i.id !== item.id);
+      saveCustomItems();
+      el.remove();
+      updateStats();
+      updateSectionBadge(section, hdrEl);
+    });
+  }
+  return el;
+}
+
+function updateSectionBadge(section, hdrEl) {
+  if (!hdrEl) return;
+  const badge = hdrEl.querySelector('.section-badge');
+  if (badge) badge.textContent = section.items.filter(isDone).length + '/' + section.items.length;
+}
+
+function makeSectionEl(sec) {
+  const div = document.createElement('div');
+  div.className = 'section';
+  div.dataset.secname = sec.name;
+  const doneCount = sec.items.filter(isDone).length;
+  const hdr = document.createElement('div');
+  hdr.className = 'section-header';
+  hdr.innerHTML = `${sec.name}<span class="section-badge">${doneCount}/${sec.items.length}</span>`;
+  div.appendChild(hdr);
+  sec.items.forEach(item => div.appendChild(makeItemEl(item, sec, hdr)));
+  div._section = sec;
+  div._hdr = hdr;
+  return div;
+}
+
+let activePhase = 'c_fund';
+
+function buildAll() {
+  const tabsEl = document.getElementById('phase-tabs');
+  const containerEl = document.getElementById('phases-container');
+  tabsEl.innerHTML = '';
+  containerEl.innerHTML = '';
+
+  PHASES.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'phase-tab' + (p.id === activePhase ? ' active' : '');
+    btn.textContent = p.label;
+    btn.addEventListener('click', () => {
+      activePhase = p.id;
+      document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.phase').forEach(ph => ph.classList.remove('visible'));
+      document.getElementById('phase-' + p.id).classList.add('visible');
+      document.getElementById('add-phase').value = p.id;
+    });
+    tabsEl.appendChild(btn);
+
+    const phaseDiv = document.createElement('div');
+    phaseDiv.className = 'phase' + (p.id === activePhase ? ' visible' : '');
+    phaseDiv.id = 'phase-' + p.id;
+    p.sections.forEach(sec => phaseDiv.appendChild(makeSectionEl(sec)));
+    containerEl.appendChild(phaseDiv);
+  });
+}
+
+function saveCustomItems() {
+  const customPhase = PHASES.find(p => p.id === 'custom');
+  save('nv_custom_items', JSON.stringify(customPhase.sections[0].items));
+}
+
+function loadCustomItems() {
+  const raw = load('nv_custom_items');
+  if (!raw) return;
+  try {
+    const items = JSON.parse(raw);
+    PHASES.find(p => p.id === 'custom').sections[0].items = items;
+  } catch(e) {}
+}
+
+function addItem() {
+  const name = document.getElementById('add-name').value.trim();
+  if (!name) { document.getElementById('add-name').focus(); return; }
+  const meta = document.getElementById('add-meta').value.trim();
+  const tag = document.getElementById('add-tag').value;
+  const phaseId = document.getElementById('add-phase').value;
+  const sectionName = document.getElementById('add-section').value.trim() || 'My additions';
+
+  const id = 'custom_' + Date.now();
+  const newItem = { id, name, meta: meta || '', tag: tag || undefined, _custom: true };
+
+  const phase = PHASES.find(p => p.id === phaseId) || PHASES.find(p => p.id === 'custom');
+  let section = phase.sections.find(s => s.name === sectionName);
+  if (!section) { section = { name: sectionName, items: [] }; phase.sections.push(section); }
+  section.items.push(newItem);
+  saveCustomItems();
+
+  const phaseEl = document.getElementById('phase-' + phase.id);
+  if (phaseEl) {
+    let secEl = Array.from(phaseEl.querySelectorAll('.section')).find(el => el.dataset.secname === sectionName);
+    if (!secEl) {
+      secEl = makeSectionEl(section);
+      phaseEl.appendChild(secEl);
+    } else {
+      const hdr = secEl._hdr || secEl.querySelector('.section-header');
+      secEl.appendChild(makeItemEl(newItem, section, hdr));
+      updateSectionBadge(section, hdr);
+    }
+    if (phase.id !== activePhase) {
+      activePhase = phase.id;
+      document.querySelectorAll('.phase-tab').forEach(t => t.classList.toggle('active', t.textContent === phase.label));
+      document.querySelectorAll('.phase').forEach(ph => ph.classList.remove('visible'));
+      phaseEl.classList.add('visible');
+    }
+  }
+
+  document.getElementById('add-name').value = '';
+  document.getElementById('add-meta').value = '';
+  document.getElementById('add-tag').value = '';
+  document.getElementById('add-section').value = '';
+  updateStats();
+}
+
+document.querySelectorAll('.nav-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('visible'));
+    document.getElementById('view-' + btn.dataset.view).classList.add('visible');
+  });
+});
+
+document.getElementById('add-btn').addEventListener('click', addItem);
+document.getElementById('add-name').addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+
+loadCustomItems();
+buildAll();
+updateStats();
+</script>
+</body>
+</html>
