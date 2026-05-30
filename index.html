@@ -171,7 +171,35 @@ body::after {
   to   { --aurora-x3: 60%; --aurora-y3: 65%; }
 }
 
-.bg-orb-2, .bg-orb-3 { display: none; }
+/* Bay Area: Golden Gate Bridge silhouette */
+.bg-ggb {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 220px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.75;
+}
+.bg-ggb svg { width: 100%; height: 100%; display: block; }
+
+/* Bay Area: Karl the Fog */
+.bg-fog {
+  position: fixed;
+  bottom: 0; left: -15%; right: -15%;
+  height: 200px;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 100%, rgba(80,100,170,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 70% 100%, rgba(90,110,180,0.05) 0%, transparent 70%),
+    linear-gradient(180deg, transparent 0%, rgba(60,80,140,0.06) 60%, rgba(40,60,120,0.1) 100%);
+  animation: fog-breathe 25s ease-in-out infinite alternate;
+}
+
+@keyframes fog-breathe {
+  from { opacity: 0.5; transform: translateX(-4%); }
+  to   { opacity: 1;   transform: translateX(4%); }
+}
 
 .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
 .app-body { display: flex; gap: 28px; align-items: flex-start; }
@@ -589,8 +617,61 @@ mark { background: var(--amber-dim); color: var(--amber); border-radius: 2px; pa
 </head>
 <body>
 <div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-<div class="bg-orb bg-orb-3"></div>
+<div class="bg-ggb" aria-hidden="true">
+  <svg viewBox="0 0 1200 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="bay-water" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(60,80,150,0)"/>
+        <stop offset="100%" stop-color="rgba(40,60,130,0.09)"/>
+      </linearGradient>
+    </defs>
+    <g stroke="rgba(120,140,210,0.14)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Side approach cables -->
+      <path d="M0,114 L290,32" stroke-width="1.5"/>
+      <path d="M1200,114 L910,32" stroke-width="1.5"/>
+      <!-- Back cable (depth) -->
+      <path d="M0,118 L290,36 Q600,157 910,36 L1200,118" stroke-width="1" opacity="0.45"/>
+      <!-- Main suspension cables -->
+      <path d="M290,30 Q600,152 910,30" stroke-width="2.2"/>
+
+      <!-- Left tower -->
+      <rect x="283" y="30" width="14" height="150" rx="2" fill="rgba(90,110,180,0.07)" stroke="rgba(130,150,220,0.18)" stroke-width="1.2"/>
+      <rect x="281" y="66" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
+      <rect x="281" y="108" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
+
+      <!-- Right tower -->
+      <rect x="903" y="30" width="14" height="150" rx="2" fill="rgba(90,110,180,0.07)" stroke="rgba(130,150,220,0.18)" stroke-width="1.2"/>
+      <rect x="901" y="66" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
+      <rect x="901" y="108" width="18" height="7" rx="1.5" fill="rgba(90,110,180,0.09)" stroke="rgba(130,150,220,0.18)" stroke-width="0.9"/>
+
+      <!-- Suspender cables (y = 30 + 244·t·(1−t), t = (x−290)/620) -->
+      <line x1="325" y1="43" x2="325" y2="180" stroke-width="0.75"/>
+      <line x1="360" y1="55" x2="360" y2="180" stroke-width="0.75"/>
+      <line x1="395" y1="64" x2="395" y2="180" stroke-width="0.75"/>
+      <line x1="430" y1="73" x2="430" y2="180" stroke-width="0.75"/>
+      <line x1="465" y1="80" x2="465" y2="180" stroke-width="0.75"/>
+      <line x1="500" y1="85" x2="500" y2="180" stroke-width="0.75"/>
+      <line x1="535" y1="88" x2="535" y2="180" stroke-width="0.75"/>
+      <line x1="570" y1="91" x2="570" y2="180" stroke-width="0.75"/>
+      <line x1="600" y1="91" x2="600" y2="180" stroke-width="0.75"/>
+      <line x1="630" y1="91" x2="630" y2="180" stroke-width="0.75"/>
+      <line x1="665" y1="88" x2="665" y2="180" stroke-width="0.75"/>
+      <line x1="700" y1="85" x2="700" y2="180" stroke-width="0.75"/>
+      <line x1="735" y1="80" x2="735" y2="180" stroke-width="0.75"/>
+      <line x1="770" y1="73" x2="770" y2="180" stroke-width="0.75"/>
+      <line x1="805" y1="64" x2="805" y2="180" stroke-width="0.75"/>
+      <line x1="840" y1="55" x2="840" y2="180" stroke-width="0.75"/>
+      <line x1="875" y1="43" x2="875" y2="180" stroke-width="0.75"/>
+
+      <!-- Road deck -->
+      <line x1="0" y1="180" x2="1200" y2="180" stroke-width="2.5" opacity="0.9"/>
+      <line x1="0" y1="186" x2="1200" y2="186" stroke-width="0.6" opacity="0.35"/>
+    </g>
+    <!-- Bay water shimmer -->
+    <rect x="0" y="180" width="1200" height="40" fill="url(#bay-water)"/>
+  </svg>
+</div>
+<div class="bg-fog" aria-hidden="true"></div>
 <div class="container">
 
 <!-- HEADER -->
