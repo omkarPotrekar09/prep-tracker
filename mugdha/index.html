@@ -130,19 +130,19 @@ body::after {
 /* NYC: Brooklyn Bridge silhouette */
 .bg-bkb {
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 340px; pointer-events: none; z-index: 0; opacity: 0.92;
+  height: 230px; pointer-events: none; z-index: 0; opacity: 0.8;
 }
 .bg-bkb svg { width: 100%; height: 100%; display: block; }
 
 /* NYC: city haze / warm amber glow from street lights */
 .bg-haze {
-  position: fixed; bottom: 0; left: -20%; right: -20%; height: 340px;
+  position: fixed; bottom: 0; left: -20%; right: -20%; height: 280px;
   pointer-events: none; z-index: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 30% 100%, rgba(251,191,36,0.09) 0%, transparent 65%),
-    radial-gradient(ellipse 70% 45% at 65% 100%, rgba(251,150,30,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 85% 100%, rgba(200,160,80,0.08) 0%, transparent 65%),
-    linear-gradient(180deg, transparent 0%, rgba(180,130,50,0.05) 55%, rgba(160,110,40,0.12) 100%);
+    radial-gradient(ellipse 80% 50% at 30% 100%, rgba(251,191,36,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 45% at 65% 100%, rgba(251,150,30,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, rgba(200,160,80,0.06) 0%, transparent 65%),
+    linear-gradient(180deg, transparent 0%, rgba(180,130,50,0.04) 55%, rgba(160,110,40,0.09) 100%);
   filter: blur(20px);
   animation: haze-drift 35s ease-in-out infinite alternate;
 }
@@ -399,346 +399,146 @@ mark { background: var(--amber-dim); color: var(--amber); border-radius: 2px; pa
 
 <!-- NYC: Brooklyn Bridge + Manhattan skyline silhouette -->
 <div class="bg-bkb" aria-hidden="true">
-  <svg viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+  <svg viewBox="0 0 1200 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
     <defs>
-      <!-- Night sky gradient -->
-      <linearGradient id="nyc-sky" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="#010009"/>
-        <stop offset="25%"  stop-color="#05031a"/>
-        <stop offset="55%"  stop-color="#090620"/>
-        <stop offset="78%"  stop-color="#0f0a1a"/>
-        <stop offset="92%"  stop-color="#180d10"/>
-        <stop offset="100%" stop-color="#1f1008"/>
+      <linearGradient id="east-river" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(40,55,120,0)"/>
+        <stop offset="100%" stop-color="rgba(30,45,100,0.08)"/>
       </linearGradient>
-      <!-- City horizon glow (amber pollution) -->
-      <radialGradient id="city-glow" cx="50%" cy="100%" r="70%" fx="50%" fy="100%">
-        <stop offset="0%"   stop-color="rgba(220,130,30,0.22)"/>
-        <stop offset="40%"  stop-color="rgba(180,90,20,0.10)"/>
-        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
-      </radialGradient>
-      <!-- Left city glow cluster (Manhattan) -->
-      <radialGradient id="manhattan-glow" cx="25%" cy="100%" r="45%">
-        <stop offset="0%"   stop-color="rgba(255,160,50,0.18)"/>
-        <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
-      </radialGradient>
-      <!-- East River water -->
-      <linearGradient id="river" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="#07091c"/>
-        <stop offset="100%" stop-color="#030510"/>
-      </linearGradient>
-      <!-- Tower stone gradient (warm amber street-light hit) -->
-      <linearGradient id="tower-L" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="rgba(140,110,70,0.55)"/>
-        <stop offset="60%"  stop-color="rgba(110,85,55,0.42)"/>
-        <stop offset="100%" stop-color="rgba(180,140,80,0.60)"/>
-      </linearGradient>
-      <linearGradient id="tower-R" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="rgba(130,105,68,0.50)"/>
-        <stop offset="60%"  stop-color="rgba(105,82,52,0.40)"/>
-        <stop offset="100%" stop-color="rgba(170,135,78,0.55)"/>
-      </linearGradient>
-      <!-- Cable gradient — warm steel -->
-      <linearGradient id="cable-main" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="rgba(200,175,120,0.55)"/>
-        <stop offset="100%" stop-color="rgba(160,135,90,0.35)"/>
-      </linearGradient>
-      <!-- Water reflection glow -->
-      <filter id="reflect-blur" x="-10%" y="-10%" width="120%" height="120%">
-        <feGaussianBlur stdDeviation="2.5"/>
-      </filter>
-      <filter id="tower-glow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="3" result="blur"/>
-        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-      </filter>
-      <!-- Window pattern (small amber lights) -->
-      <pattern id="win-sm" x="0" y="0" width="6" height="8" patternUnits="userSpaceOnUse">
-        <rect x="0.8" y="1" width="2.8" height="4" fill="rgba(255,210,90,0.20)" rx="0.3"/>
-      </pattern>
-      <pattern id="win-lg" x="0" y="0" width="9" height="11" patternUnits="userSpaceOnUse">
-        <rect x="1" y="1.5" width="4" height="5.5" fill="rgba(255,200,80,0.16)" rx="0.3"/>
-      </pattern>
     </defs>
 
-    <!-- ── LAYER 1: Night sky ─────────────────────────────── -->
-    <rect width="1200" height="340" fill="url(#nyc-sky)"/>
-
-    <!-- ── LAYER 2: Stars ────────────────────────────────── -->
-    <g fill="white">
-      <!-- Brighter stars -->
-      <circle cx="38"   cy="22"  r="1.2" opacity="0.85"/>
-      <circle cx="142"  cy="14"  r="1.3" opacity="0.80"/>
-      <circle cx="312"  cy="18"  r="1.1" opacity="0.78"/>
-      <circle cx="498"  cy="11"  r="1.4" opacity="0.82"/>
-      <circle cx="661"  cy="20"  r="1.2" opacity="0.76"/>
-      <circle cx="832"  cy="9"   r="1.3" opacity="0.84"/>
-      <circle cx="1003" cy="17"  r="1.1" opacity="0.79"/>
-      <circle cx="1138" cy="24"  r="1.2" opacity="0.77"/>
-      <!-- Medium stars -->
-      <circle cx="85"   cy="38"  r="0.9" opacity="0.60"/>
-      <circle cx="195"  cy="29"  r="0.8" opacity="0.55"/>
-      <circle cx="258"  cy="44"  r="0.9" opacity="0.62"/>
-      <circle cx="402"  cy="33"  r="0.8" opacity="0.58"/>
-      <circle cx="475"  cy="48"  r="0.9" opacity="0.60"/>
-      <circle cx="552"  cy="26"  r="0.8" opacity="0.56"/>
-      <circle cx="607"  cy="42"  r="0.9" opacity="0.61"/>
-      <circle cx="724"  cy="31"  r="0.8" opacity="0.57"/>
-      <circle cx="778"  cy="45"  r="0.9" opacity="0.59"/>
-      <circle cx="895"  cy="28"  r="0.8" opacity="0.62"/>
-      <circle cx="949"  cy="40"  r="0.9" opacity="0.58"/>
-      <circle cx="1058" cy="32"  r="0.8" opacity="0.60"/>
-      <circle cx="1112" cy="46"  r="0.9" opacity="0.57"/>
-      <circle cx="1185" cy="19"  r="0.8" opacity="0.63"/>
-      <!-- Faint stars -->
-      <circle cx="55"   cy="62"  r="0.6" opacity="0.38"/>
-      <circle cx="118"  cy="55"  r="0.5" opacity="0.32"/>
-      <circle cx="178"  cy="70"  r="0.6" opacity="0.35"/>
-      <circle cx="232"  cy="58"  r="0.5" opacity="0.30"/>
-      <circle cx="348"  cy="65"  r="0.6" opacity="0.36"/>
-      <circle cx="430"  cy="72"  r="0.5" opacity="0.33"/>
-      <circle cx="535"  cy="60"  r="0.6" opacity="0.37"/>
-      <circle cx="625"  cy="75"  r="0.5" opacity="0.31"/>
-      <circle cx="718"  cy="63"  r="0.6" opacity="0.34"/>
-      <circle cx="812"  cy="68"  r="0.5" opacity="0.36"/>
-      <circle cx="905"  cy="58"  r="0.6" opacity="0.32"/>
-      <circle cx="988"  cy="74"  r="0.5" opacity="0.35"/>
-      <circle cx="1075" cy="62"  r="0.6" opacity="0.33"/>
-      <circle cx="1165" cy="70"  r="0.5" opacity="0.30"/>
-      <!-- Very faint distant stars -->
-      <circle cx="100"  cy="90"  r="0.5" opacity="0.25"/>
-      <circle cx="285"  cy="85"  r="0.4" opacity="0.22"/>
-      <circle cx="460"  cy="95"  r="0.5" opacity="0.24"/>
-      <circle cx="640"  cy="88"  r="0.4" opacity="0.20"/>
-      <circle cx="820"  cy="93"  r="0.5" opacity="0.23"/>
-      <circle cx="1000" cy="87"  r="0.4" opacity="0.21"/>
-      <circle cx="1155" cy="92"  r="0.5" opacity="0.24"/>
+    <!-- Manhattan skyline silhouette (background, very faint) -->
+    <g fill="rgba(70,60,100,0.11)" stroke="none">
+      <!-- Lower Manhattan left cluster -->
+      <rect x="30" y="90" width="22" height="95"/>
+      <rect x="56" y="75" width="18" height="110"/>
+      <rect x="78" y="100" width="26" height="85"/>
+      <rect x="108" y="82" width="20" height="103"/>
+      <rect x="132" y="110" width="24" height="75"/>
+      <!-- One WTC -->
+      <rect x="162" y="42" width="20" height="143"/>
+      <polygon points="172,10 162,55 182,55"/>
+      <!-- More lower Manhattan -->
+      <rect x="187" y="88" width="22" height="97"/>
+      <rect x="213" y="70" width="18" height="115"/>
+      <rect x="235" y="95" width="28" height="90"/>
+      <rect x="267" y="80" width="20" height="105"/>
+      <rect x="291" y="112" width="24" height="73"/>
+      <rect x="319" y="95" width="18" height="90"/>
+      <rect x="341" y="108" width="22" height="77"/>
+      <!-- Gap around bridge towers -->
+      <rect x="700" y="95" width="20" height="90"/>
+      <rect x="724" y="78" width="24" height="107"/>
+      <!-- Midtown left of right tower -->
+      <rect x="752" y="88" width="18" height="97"/>
+      <!-- Empire State style -->
+      <rect x="776" y="52" width="26" height="133"/>
+      <rect x="780" y="36" width="18" height="34"/>
+      <rect x="784" y="22" width="10" height="22"/>
+      <!-- Chrysler style -->
+      <rect x="808" y="65" width="22" height="120"/>
+      <polygon points="819,42 808,72 830,72"/>
+      <!-- More midtown -->
+      <rect x="836" y="82" width="28" height="103"/>
+      <rect x="868" y="72" width="22" height="113"/>
+      <rect x="894" y="90" width="30" height="95"/>
+      <rect x="928" y="105" width="20" height="80"/>
+      <rect x="952" y="88" width="24" height="97"/>
+      <rect x="980" y="100" width="28" height="85"/>
+      <rect x="1012" y="115" width="18" height="70"/>
+      <rect x="1034" y="95" width="22" height="90"/>
+      <rect x="1060" y="110" width="26" height="75"/>
+      <rect x="1090" y="98" width="20" height="87"/>
+      <rect x="1114" y="115" width="24" height="70"/>
+      <rect x="1142" y="102" width="18" height="83"/>
+      <rect x="1165" y="118" width="22" height="67"/>
     </g>
 
-    <!-- ── LAYER 3: Crescent moon ─────────────────────────── -->
-    <g transform="translate(1060,52)">
-      <circle r="14" fill="rgba(255,240,200,0.12)"/>
-      <circle r="11" fill="rgba(255,235,185,0.22)" cx="0" cy="0"/>
-      <!-- Crescent mask: overlapping darker circle to create crescent -->
-      <circle r="10" fill="#06050f" cx="6" cy="-3" opacity="0.92"/>
+    <!-- Brooklyn Bridge -->
+    <g stroke="rgba(105,88,65,0.26)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+      <!-- Approach cables from anchorages to towers -->
+      <path d="M0,118 L392,28" stroke-width="1.6"/>
+      <path d="M1200,118 L808,28" stroke-width="1.6"/>
+      <!-- Back approach cables (depth) -->
+      <path d="M0,122 L392,32" stroke-width="0.9" opacity="0.4"/>
+      <path d="M1200,122 L808,32" stroke-width="0.9" opacity="0.4"/>
+
+      <!-- Main suspension cable -->
+      <path d="M392,28 Q600,155 808,28" stroke-width="2.4"/>
+      <!-- Secondary cable (depth) -->
+      <path d="M392,32 Q600,160 808,32" stroke-width="1" opacity="0.35"/>
+
+      <!-- Left tower — Gothic stone tower -->
+      <rect x="381" y="28" width="22" height="160" rx="2"
+            fill="rgba(85,70,52,0.14)" stroke="rgba(120,100,75,0.32)" stroke-width="1.3"/>
+      <!-- Left tower arch openings (gothic pointed) -->
+      <path d="M386,120 L386,162 Q392,155 398,162 L398,120 Q392,112 386,120"
+            fill="rgba(0,0,8,0.12)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <path d="M387,80 L387,112 Q392,106 397,112 L397,80 Q392,73 387,80"
+            fill="rgba(0,0,8,0.10)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <!-- Left tower cross-pieces -->
+      <rect x="379" y="60" width="26" height="6" rx="1.5"
+            fill="rgba(85,70,52,0.12)" stroke="rgba(120,100,75,0.28)" stroke-width="0.9"/>
+
+      <!-- Right tower — Gothic stone tower -->
+      <rect x="797" y="28" width="22" height="160" rx="2"
+            fill="rgba(85,70,52,0.14)" stroke="rgba(120,100,75,0.32)" stroke-width="1.3"/>
+      <path d="M802,120 L802,162 Q808,155 814,162 L814,120 Q808,112 802,120"
+            fill="rgba(0,0,8,0.12)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <path d="M803,80 L803,112 Q808,106 813,112 L813,80 Q808,73 803,80"
+            fill="rgba(0,0,8,0.10)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <rect x="795" y="60" width="26" height="6" rx="1.5"
+            fill="rgba(85,70,52,0.12)" stroke="rgba(120,100,75,0.28)" stroke-width="0.9"/>
+
+      <!-- Diagonal stay cables (Brooklyn Bridge's signature harp pattern) -->
+      <!-- From LEFT tower, fanning left toward anchorage -->
+      <line x1="390" y1="35" x2="130" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="180" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="230" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="290" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="340" y2="188" stroke-width="0.85"/>
+      <!-- From LEFT tower, fanning right toward center span -->
+      <line x1="392" y1="35" x2="460" y2="188" stroke-width="0.85"/>
+      <line x1="392" y1="35" x2="510" y2="188" stroke-width="0.85"/>
+      <line x1="392" y1="35" x2="555" y2="188" stroke-width="0.85"/>
+      <line x1="392" y1="35" x2="592" y2="188" stroke-width="0.85"/>
+
+      <!-- From RIGHT tower, fanning left toward center span -->
+      <line x1="808" y1="35" x2="608" y2="188" stroke-width="0.85"/>
+      <line x1="808" y1="35" x2="645" y2="188" stroke-width="0.85"/>
+      <line x1="808" y1="35" x2="690" y2="188" stroke-width="0.85"/>
+      <line x1="808" y1="35" x2="740" y2="188" stroke-width="0.85"/>
+      <!-- From RIGHT tower, fanning right toward anchorage -->
+      <line x1="810" y1="35" x2="860" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="910" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="960" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="1020" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="1070" y2="188" stroke-width="0.85"/>
+
+      <!-- Vertical suspender cables from main catenary to deck -->
+      <!-- y = 28 + 127*(1 - ((x-600)/208)^2) for x in [392,808] -->
+      <line x1="420" y1="52"  x2="420" y2="188" stroke-width="0.7"/>
+      <line x1="450" y1="76"  x2="450" y2="188" stroke-width="0.7"/>
+      <line x1="480" y1="99"  x2="480" y2="188" stroke-width="0.7"/>
+      <line x1="510" y1="118" x2="510" y2="188" stroke-width="0.7"/>
+      <line x1="540" y1="134" x2="540" y2="188" stroke-width="0.7"/>
+      <line x1="570" y1="146" x2="570" y2="188" stroke-width="0.7"/>
+      <line x1="600" y1="152" x2="600" y2="188" stroke-width="0.7"/>
+      <line x1="630" y1="152" x2="630" y2="188" stroke-width="0.7"/>
+      <line x1="660" y1="146" x2="660" y2="188" stroke-width="0.7"/>
+      <line x1="690" y1="134" x2="690" y2="188" stroke-width="0.7"/>
+      <line x1="720" y1="118" x2="720" y2="188" stroke-width="0.7"/>
+      <line x1="750" y1="99"  x2="750" y2="188" stroke-width="0.7"/>
+      <line x1="780" y1="76"  x2="780" y2="188" stroke-width="0.7"/>
+
+      <!-- Road deck -->
+      <line x1="0" y1="188" x2="1200" y2="188" stroke-width="2.8" opacity="0.9"/>
+      <line x1="0" y1="194" x2="1200" y2="194" stroke-width="0.6" opacity="0.3"/>
     </g>
 
-    <!-- ── LAYER 4: City horizon glow ─────────────────────── -->
-    <rect x="0" y="150" width="1200" height="190" fill="url(#city-glow)"/>
-    <rect x="0" y="170" width="500"  height="170" fill="url(#manhattan-glow)"/>
-
-    <!-- ── LAYER 5: Manhattan skyline (Lower Manhattan) ───── -->
-    <!-- Main silhouette polygon — continuous skyline profile -->
-    <polygon
-      points="
-        0,340  0,200
-        22,200  22,188  42,188  42,205
-        55,205  55,175  72,175  72,190
-        85,190  85,168  102,168  102,183
-        118,183  118,158  135,158  135,178
-        148,178
-        148,35
-        155,28  162,18  168,8  174,18  180,28  187,35
-        187,170
-        198,170  198,140  215,140  215,162
-        228,162  228,130  245,130  245,152
-        258,152  258,118  275,118  275,145
-        288,145  288,128  305,128  305,148
-        318,148  318,138  332,138  332,155
-        345,155  345,165  360,165  360,185
-        370,185  370,340
-      "
-      fill="#0a0818" stroke="rgba(160,130,90,0.08)" stroke-width="0.5"
-    />
-    <!-- Window lights overlay on Manhattan silhouette -->
-    <clipPath id="manhattan-clip">
-      <polygon points="0,340 0,200 22,200 22,188 42,188 42,205 55,205 55,175 72,175 72,190 85,190 85,168 102,168 102,183 118,183 118,158 135,158 135,178 148,178 148,35 155,28 162,18 168,8 174,18 180,28 187,35 187,170 198,170 198,140 215,140 215,162 228,162 228,130 245,130 245,152 258,152 258,118 275,118 275,145 288,145 288,128 305,128 305,148 318,148 318,138 332,138 332,155 345,155 345,165 360,165 360,185 370,185 370,340"/>
-    </clipPath>
-    <rect x="0" y="0" width="375" height="340" fill="url(#win-sm)" clip-path="url(#manhattan-clip)" opacity="0.9"/>
-
-    <!-- One WTC spire glow -->
-    <line x1="168" y1="8" x2="168" y2="35" stroke="rgba(255,240,200,0.45)" stroke-width="0.8"/>
-    <circle cx="168" cy="8" r="1.5" fill="rgba(255,200,100,0.5)"/>
-
-    <!-- ── LAYER 6: Brooklyn / right side skyline ─────────── -->
-    <polygon
-      points="
-        830,340  830,210
-        848,210  848,195  865,195  865,208
-        878,208  878,188  895,188  895,205
-        910,205  910,182  928,182  928,200
-        942,200  942,172  960,172  960,192
-        975,192  975,180  992,180  992,198
-        1008,198  1008,185  1025,185  1025,200
-        1040,200  1040,188  1058,188  1058,205
-        1072,205  1072,192  1090,192  1090,208
-        1108,208  1108,198  1125,198  1125,210
-        1142,210  1142,200  1160,200  1160,215
-        1178,215  1178,205  1200,205  1200,340
-      "
-      fill="#08071a" stroke="rgba(140,115,80,0.07)" stroke-width="0.5"
-    />
-    <clipPath id="brooklyn-clip">
-      <polygon points="830,340 830,210 848,210 848,195 865,195 865,208 878,208 878,188 895,188 895,205 910,205 910,182 928,182 928,200 942,200 942,172 960,172 960,192 975,192 975,180 992,180 992,198 1008,198 1008,185 1025,185 1025,200 1040,200 1040,188 1058,188 1058,205 1072,205 1072,192 1090,192 1090,208 1108,208 1108,198 1125,198 1125,210 1142,210 1142,200 1160,200 1160,215 1178,215 1178,205 1200,205 1200,340"/>
-    </clipPath>
-    <rect x="830" y="0" width="370" height="340" fill="url(#win-sm)" clip-path="url(#brooklyn-clip)" opacity="0.7"/>
-
-    <!-- ── LAYER 7: Brooklyn Bridge ───────────────────────── -->
-
-    <!-- Approach cables — warm steel -->
-    <line x1="0"    y1="148" x2="392" y2="58" stroke="rgba(190,160,100,0.42)" stroke-width="2.0" stroke-linecap="round"/>
-    <line x1="1200" y1="148" x2="808" y2="58" stroke="rgba(190,160,100,0.42)" stroke-width="2.0" stroke-linecap="round"/>
-    <!-- Depth cables -->
-    <line x1="0"    y1="153" x2="392" y2="63" stroke="rgba(160,135,88,0.22)" stroke-width="1.1"/>
-    <line x1="1200" y1="153" x2="808" y2="63" stroke="rgba(160,135,88,0.22)" stroke-width="1.1"/>
-
-    <!-- Main suspension cable -->
-    <path d="M392,58 Q600,195 808,58"
-          stroke="rgba(200,170,105,0.55)" fill="none" stroke-width="2.8" stroke-linecap="round"/>
-    <!-- Secondary cable (depth/shadow) -->
-    <path d="M392,63 Q600,201 808,63"
-          stroke="rgba(150,125,78,0.28)" fill="none" stroke-width="1.3"/>
-
-    <!-- ── LEFT TOWER (Gothic stone) ─────────────────────── -->
-    <!-- Tower body with warm stone gradient -->
-    <rect x="380" y="55" width="24" height="195"
-          fill="url(#tower-L)" rx="2"/>
-    <!-- Stone texture edge highlight -->
-    <rect x="380" y="55" width="24" height="195"
-          fill="none" stroke="rgba(200,165,95,0.40)" stroke-width="1.4" rx="2"/>
-    <!-- Darker left face shadow -->
-    <rect x="380" y="55" width="8" height="195"
-          fill="rgba(0,0,0,0.18)" rx="2 0 0 2"/>
-    <!-- Cross-brace horizontal bands -->
-    <rect x="377" y="100" width="30" height="7" rx="1.5"
-          fill="rgba(130,100,62,0.45)" stroke="rgba(210,175,100,0.38)" stroke-width="1"/>
-    <rect x="377" y="148" width="30" height="6" rx="1.5"
-          fill="rgba(130,100,62,0.40)" stroke="rgba(210,175,100,0.35)" stroke-width="1"/>
-    <!-- Gothic arch openings: upper pedestrian arch -->
-    <path d="M386,105 L386,148 Q392,140 398,148 L398,105 Q392,96 386,105"
-          fill="rgba(0,0,15,0.55)" stroke="rgba(190,155,88,0.30)" stroke-width="1"/>
-    <!-- Gothic arch openings: lower road arch -->
-    <path d="M385,158 L385,248 Q392,248 399,248 L399,158 Q392,150 385,158"
-          fill="rgba(0,0,15,0.50)" stroke="rgba(190,155,88,0.28)" stroke-width="1"/>
-    <!-- Tower cap / crown detail -->
-    <rect x="377" y="55" width="30" height="10" rx="2"
-          fill="rgba(160,125,75,0.55)" stroke="rgba(220,185,110,0.45)" stroke-width="1"/>
-    <!-- Tower top navigation light -->
-    <circle cx="392" cy="55" r="2.5" fill="rgba(255,80,80,0.75)"/>
-    <circle cx="392" cy="55" r="5" fill="rgba(255,60,60,0.18)"/>
-    <!-- Street lamp glow at tower base -->
-    <ellipse cx="392" cy="248" rx="18" ry="6" fill="rgba(255,180,60,0.14)"/>
-
-    <!-- ── RIGHT TOWER (Gothic stone) ────────────────────── -->
-    <rect x="796" y="55" width="24" height="195"
-          fill="url(#tower-R)" rx="2"/>
-    <rect x="796" y="55" width="24" height="195"
-          fill="none" stroke="rgba(195,162,92,0.38)" stroke-width="1.4" rx="2"/>
-    <rect x="812" y="55" width="8" height="195"
-          fill="rgba(0,0,0,0.15)" rx="0 2 2 0"/>
-    <rect x="793" y="100" width="30" height="7" rx="1.5"
-          fill="rgba(125,97,60,0.43)" stroke="rgba(205,170,98,0.36)" stroke-width="1"/>
-    <rect x="793" y="148" width="30" height="6" rx="1.5"
-          fill="rgba(125,97,60,0.38)" stroke="rgba(205,170,98,0.33)" stroke-width="1"/>
-    <path d="M802,105 L802,148 Q808,140 814,148 L814,105 Q808,96 802,105"
-          fill="rgba(0,0,15,0.52)" stroke="rgba(185,152,86,0.28)" stroke-width="1"/>
-    <path d="M801,158 L801,248 Q808,248 815,248 L815,158 Q808,150 801,158"
-          fill="rgba(0,0,15,0.48)" stroke="rgba(185,152,86,0.26)" stroke-width="1"/>
-    <rect x="793" y="55" width="30" height="10" rx="2"
-          fill="rgba(155,122,73,0.52)" stroke="rgba(215,180,108,0.42)" stroke-width="1"/>
-    <circle cx="808" cy="55" r="2.5" fill="rgba(255,80,80,0.72)"/>
-    <circle cx="808" cy="55" r="5" fill="rgba(255,60,60,0.16)"/>
-    <ellipse cx="808" cy="248" rx="18" ry="6" fill="rgba(255,175,58,0.13)"/>
-
-    <!-- ── DIAGONAL STAY CABLES (harp pattern) ───────────── -->
-    <g stroke="rgba(185,155,95,0.32)" fill="none" stroke-linecap="round">
-      <!-- Left tower — fans left -->
-      <line x1="390" y1="65" x2="100" y2="248" stroke-width="1.0"/>
-      <line x1="390" y1="65" x2="155" y2="248" stroke-width="1.0"/>
-      <line x1="390" y1="65" x2="210" y2="248" stroke-width="1.0"/>
-      <line x1="390" y1="65" x2="268" y2="248" stroke-width="1.0"/>
-      <line x1="390" y1="65" x2="328" y2="248" stroke-width="1.0"/>
-      <!-- Left tower — fans right -->
-      <line x1="392" y1="65" x2="455" y2="248" stroke-width="1.0"/>
-      <line x1="392" y1="65" x2="510" y2="248" stroke-width="1.0"/>
-      <line x1="392" y1="65" x2="558" y2="248" stroke-width="1.0"/>
-      <line x1="392" y1="65" x2="596" y2="248" stroke-width="1.0"/>
-      <!-- Right tower — fans left -->
-      <line x1="808" y1="65" x2="604" y2="248" stroke-width="1.0"/>
-      <line x1="808" y1="65" x2="642" y2="248" stroke-width="1.0"/>
-      <line x1="808" y1="65" x2="690" y2="248" stroke-width="1.0"/>
-      <line x1="808" y1="65" x2="745" y2="248" stroke-width="1.0"/>
-      <!-- Right tower — fans right -->
-      <line x1="810" y1="65" x2="872" y2="248" stroke-width="1.0"/>
-      <line x1="810" y1="65" x2="930" y2="248" stroke-width="1.0"/>
-      <line x1="810" y1="65" x2="988" y2="248" stroke-width="1.0"/>
-      <line x1="810" y1="65" x2="1048" y2="248" stroke-width="1.0"/>
-      <line x1="810" y1="65" x2="1100" y2="248" stroke-width="1.0"/>
-    </g>
-
-    <!-- ── VERTICAL SUSPENDER CABLES ─────────────────────── -->
-    <!-- y = 58 + 137*(1 - ((x-600)/208)^2) -->
-    <g stroke="rgba(175,148,90,0.28)" stroke-width="0.75">
-      <line x1="420" y1="80"  x2="420" y2="248"/>
-      <line x1="450" y1="102" x2="450" y2="248"/>
-      <line x1="480" y1="123" x2="480" y2="248"/>
-      <line x1="510" y1="142" x2="510" y2="248"/>
-      <line x1="540" y1="158" x2="540" y2="248"/>
-      <line x1="570" y1="170" x2="570" y2="248"/>
-      <line x1="600" y1="178" x2="600" y2="248"/>
-      <line x1="630" y1="178" x2="630" y2="248"/>
-      <line x1="660" y1="170" x2="660" y2="248"/>
-      <line x1="690" y1="158" x2="690" y2="248"/>
-      <line x1="720" y1="142" x2="720" y2="248"/>
-      <line x1="750" y1="123" x2="750" y2="248"/>
-      <line x1="780" y1="102" x2="780" y2="248"/>
-    </g>
-
-    <!-- ── ROAD DECK ───────────────────────────────────────── -->
-    <rect x="0" y="246" width="1200" height="4"
-          fill="rgba(140,115,72,0.65)"/>
-    <line x1="0" y1="250" x2="1200" y2="250"
-          stroke="rgba(100,80,48,0.35)" stroke-width="1.2"/>
-    <!-- Deck underside shadow -->
-    <rect x="0" y="250" width="1200" height="5"
-          fill="rgba(0,0,0,0.22)"/>
-
-    <!-- ── LAYER 8: East River ────────────────────────────── -->
-    <rect x="0" y="250" width="1200" height="90" fill="url(#river)"/>
-
-    <!-- Water surface shimmer line -->
-    <line x1="0" y1="252" x2="1200" y2="252"
-          stroke="rgba(80,100,160,0.20)" stroke-width="0.8"/>
-
-    <!-- ── LAYER 9: Water reflections ─────────────────────── -->
-    <!-- Bridge cable reflection (blurred vertical streaks) -->
-    <g filter="url(#reflect-blur)" opacity="0.55">
-      <!-- Main cable arch reflection -->
-      <path d="M392,252 Q600,290 808,252"
-            stroke="rgba(190,160,95,0.35)" fill="none" stroke-width="2.5"/>
-      <!-- Left approach cable reflection -->
-      <line x1="0" y1="252" x2="392" y2="268"
-            stroke="rgba(180,150,88,0.25)" stroke-width="1.5"/>
-      <line x1="1200" y1="252" x2="808" y2="268"
-            stroke="rgba(180,150,88,0.25)" stroke-width="1.5"/>
-      <!-- Tower reflections -->
-      <rect x="384" y="252" width="16" height="50"
-            fill="rgba(160,128,78,0.22)"/>
-      <rect x="800" y="252" width="16" height="50"
-            fill="rgba(155,124,76,0.20)"/>
-      <!-- City light reflections in water (warm amber streaks) -->
-      <line x1="168" y1="252" x2="165" y2="320"
-            stroke="rgba(255,200,80,0.30)" stroke-width="2.5"/>
-      <line x1="392" y1="252" x2="390" y2="310"
-            stroke="rgba(255,180,60,0.22)" stroke-width="2"/>
-      <line x1="808" y1="252" x2="806" y2="310"
-            stroke="rgba(255,180,60,0.22)" stroke-width="2"/>
-      <line x1="600" y1="252" x2="598" y2="300"
-            stroke="rgba(200,220,255,0.18)" stroke-width="1.8"/>
-      <!-- Scattered small reflections -->
-      <line x1="250" y1="252" x2="249" y2="285" stroke="rgba(255,190,70,0.18)" stroke-width="1.2"/>
-      <line x1="450" y1="252" x2="449" y2="278" stroke="rgba(200,175,120,0.20)" stroke-width="1"/>
-      <line x1="750" y1="252" x2="749" y2="280" stroke="rgba(200,175,120,0.20)" stroke-width="1"/>
-      <line x1="950" y1="252" x2="949" y2="283" stroke="rgba(255,185,68,0.18)" stroke-width="1.2"/>
-    </g>
+    <!-- East River water shimmer -->
+    <rect x="0" y="188" width="1200" height="42" fill="url(#east-river)"/>
   </svg>
 </div>
 
