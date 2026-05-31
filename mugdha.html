@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mugdha — Interview Prep Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens ──────────────────────────────────────────── */
+:root {
+  --bg: #06060f;
+  --surface: #0c0c1a;
+  --surface2: #111122;
+  --surface3: #171728;
+  --border: rgba(110,110,200,0.1);
+  --border2: rgba(130,130,220,0.2);
+  --text: #ddddf2;
+  --text2: #6e6e96;
+  --text3: #36364e;
+  --accent: #00e5b0;
+  --accent-dim: rgba(0,229,176,0.1);
+  --accent-border: rgba(0,229,176,0.3);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251,191,36,0.1);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+  --glow: rgba(0,229,176,0.07);
+  --noise-opacity: 0.04;
+}
+
+[data-theme="light"] {
+  --bg: #f0f0f9;
+  --surface: #ffffff;
+  --surface2: #e8e8f5;
+  --surface3: #dedeed;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.14);
+  --text: #12122a;
+  --text2: #50507a;
+  --text3: #9090b8;
+  --accent: #009e78;
+  --accent-dim: rgba(0,158,120,0.1);
+  --accent-border: rgba(0,158,120,0.28);
+  --amber: #b45309;
+  --amber-dim: rgba(180,83,9,0.1);
+  --blue: #2563eb;
+  --blue-dim: rgba(37,99,235,0.1);
+  --red: #dc2626;
+  --red-dim: rgba(220,38,38,0.1);
+  --purple: #7c3aed;
+  --purple-dim: rgba(124,58,237,0.1);
+  --shadow: 0 4px 20px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06);
+  --glow: rgba(0,158,120,0.025);
+  --noise-opacity: 0.02;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f0f0f9; --surface: #ffffff; --surface2: #e8e8f5; --surface3: #dedeed;
+    --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.14);
+    --glow: rgba(0,158,120,0.025); --noise-opacity: 0.02;
+    --text: #12122a; --text2: #50507a; --text3: #9090b8;
+    --accent: #009e78; --accent-dim: rgba(0,158,120,0.1); --accent-border: rgba(0,158,120,0.28);
+    --amber: #b45309; --amber-dim: rgba(180,83,9,0.1);
+    --blue: #2563eb; --blue-dim: rgba(37,99,235,0.1);
+    --red: #dc2626; --red-dim: rgba(220,38,38,0.1);
+    --purple: #7c3aed; --purple-dim: rgba(124,58,237,0.1);
+    --shadow: 0 4px 20px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+body {
+  background: var(--bg); color: var(--text); font-family: var(--sans);
+  font-size: 14px; line-height: 1.6; min-height: 100vh;
+  transition: background 0.2s, color 0.2s; -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; font-feature-settings: 'cv11','ss01','liga' 1;
+  font-optical-sizing: auto; text-rendering: optimizeLegibility;
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px; opacity: var(--noise-opacity); pointer-events: none; z-index: 0;
+}
+
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background: radial-gradient(ellipse 1000px 600px at 50% -80px, var(--glow) 0%, transparent 70%);
+  pointer-events: none; z-index: 0; animation: glow-breathe 8s ease-in-out infinite;
+}
+
+@keyframes glow-breathe { 0%,100% { opacity: 0.5; } 50% { opacity: 1.8; } }
+
+@property --aurora-x1 { syntax: '<percentage>'; initial-value: 15%; inherits: false; }
+@property --aurora-y1 { syntax: '<percentage>'; initial-value: 20%; inherits: false; }
+@property --aurora-x2 { syntax: '<percentage>'; initial-value: 80%; inherits: false; }
+@property --aurora-y2 { syntax: '<percentage>'; initial-value: 75%; inherits: false; }
+@property --aurora-x3 { syntax: '<percentage>'; initial-value: 50%; inherits: false; }
+@property --aurora-y3 { syntax: '<percentage>'; initial-value: 50%; inherits: false; }
+
+.bg-orb-1 {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 45% at var(--aurora-x1) var(--aurora-y1), rgba(0,229,176,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 45% 40% at var(--aurora-x2) var(--aurora-y2), rgba(96,165,250,0.16) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 35% at var(--aurora-x3) var(--aurora-y3), rgba(167,139,250,0.13) 0%, transparent 100%);
+  animation: aurora-1 12s ease-in-out infinite alternate,
+             aurora-2 17s ease-in-out infinite alternate,
+             aurora-3 23s ease-in-out infinite alternate;
+}
+@keyframes aurora-1 { from { --aurora-x1: 10%; --aurora-y1: 15%; } to { --aurora-x1: 35%; --aurora-y1: 40%; } }
+@keyframes aurora-2 { from { --aurora-x2: 75%; --aurora-y2: 70%; } to { --aurora-x2: 90%; --aurora-y2: 30%; } }
+@keyframes aurora-3 { from { --aurora-x3: 45%; --aurora-y3: 45%; } to { --aurora-x3: 60%; --aurora-y3: 65%; } }
+
+/* NYC: Brooklyn Bridge silhouette */
+.bg-bkb {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 230px; pointer-events: none; z-index: 0; opacity: 0.8;
+}
+.bg-bkb svg { width: 100%; height: 100%; display: block; }
+
+/* NYC: city haze / warm amber glow from street lights */
+.bg-haze {
+  position: fixed; bottom: 0; left: -20%; right: -20%; height: 280px;
+  pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 30% 100%, rgba(251,191,36,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 45% at 65% 100%, rgba(251,150,30,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, rgba(200,160,80,0.06) 0%, transparent 65%),
+    linear-gradient(180deg, transparent 0%, rgba(180,130,50,0.04) 55%, rgba(160,110,40,0.09) 100%);
+  filter: blur(20px);
+  animation: haze-drift 35s ease-in-out infinite alternate;
+}
+@keyframes haze-drift {
+  from { opacity: 0.7; transform: translateX(-3%); }
+  to   { opacity: 1;   transform: translateX(3%); }
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
+.app-body { display: flex; gap: 28px; align-items: flex-start; }
+.sidebar { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; }
+.sidebar::-webkit-scrollbar { width: 3px; }
+.main-panel { flex: 1; min-width: 0; }
+
+/* ── Header ──────────────────────────────────────────────── */
+.header { margin-bottom: 2rem; }
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.logo { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; margin-bottom: 10px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--blue) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.title { font-size: 32px; font-weight: 700; color: var(--text); letter-spacing: -1px; line-height: 1.1; }
+.subtitle { font-size: 13px; color: var(--text2); margin-top: 6px; font-weight: 400; letter-spacing: 0.01em; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.header-badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.timeline-badge { font-family: var(--mono); font-size: 11px; padding: 6px 14px; border: 1px solid var(--accent-border); border-radius: var(--radius); color: var(--accent); background: var(--accent-dim); white-space: nowrap; }
+.countdown-badge { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text2); background: var(--surface); white-space: nowrap; }
+.countdown-badge span { color: var(--amber); font-weight: 500; }
+.icon-btn { font-size: 15px; width: 32px; height: 32px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--surface); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+.icon-btn:hover { color: var(--accent); border-color: var(--accent-border); background: var(--accent-dim); }
+
+/* ── Timer ───────────────────────────────────────────────── */
+.timer-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+.timer-bar::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--accent), var(--blue)); }
+.timer-controls { display: flex; gap: 6px; }
+.timer-controls .timer-btn { flex: 1; text-align: center; }
+.timer-bottom-row { display: flex; gap: 16px; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; }
+.timer-col { display: flex; flex-direction: column; gap: 3px; }
+.timer-label { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
+.timer-display { font-family: var(--mono); font-size: 28px; font-weight: 500; color: var(--text); min-width: 100px; letter-spacing: 0.06em; }
+.timer-display.running { color: var(--accent); text-shadow: 0 0 24px rgba(0,229,176,0.35); }
+.timer-val { font-family: var(--mono); font-size: 15px; color: var(--text2); font-weight: 500; }
+.timer-btn { font-size: 12px; padding: 6px 16px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--surface2); color: var(--text2); cursor: pointer; font-family: var(--mono); transition: all 0.15s; white-space: nowrap; }
+.timer-btn.start { border-color: var(--accent-border); color: var(--accent); background: var(--accent-dim); }
+.timer-btn.start:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+.timer-btn:not(.start):hover { border-color: var(--border2); color: var(--text); }
+.timer-hint { font-size: 10px; color: var(--text3); margin-left: auto; font-family: var(--mono); }
+
+/* ── Stats ───────────────────────────────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.25rem 1rem; position: relative; overflow: hidden; }
+.stat::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.stat:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--blue)); }
+.stat:nth-child(2)::before { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+.stat:nth-child(3)::before { background: linear-gradient(90deg, var(--purple), var(--accent)); }
+.stat:nth-child(4)::before { background: linear-gradient(90deg, var(--amber), var(--red)); }
+.stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; font-family: var(--mono); font-weight: 500; }
+.stat-val { font-size: 34px; font-weight: 700; color: var(--text); font-family: var(--mono); line-height: 1; letter-spacing: -1px; }
+.stat-sub { font-size: 11px; color: var(--text2); margin-top: 6px; font-weight: 400; }
+.progress-bar-wrap { height: 3px; background: var(--surface3); border-radius: 99px; margin-top: 10px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 99px; transition: width 0.5s ease; background: linear-gradient(90deg, var(--accent), var(--blue)); }
+
+/* ── Weekly chart ────────────────────────────────────────── */
+.chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.chart-title { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); }
+.chart-week-total { font-size: 11px; color: var(--text2); font-family: var(--mono); }
+.chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px 12px; }
+.chart-bars { display: flex; gap: 8px; align-items: flex-end; height: 64px; justify-content: space-around; margin-bottom: 8px; }
+.chart-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.chart-bar-wrap { flex: 1; display: flex; align-items: flex-end; width: 100%; height: 52px; }
+.chart-bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--surface3); transition: height 0.4s ease; min-height: 3px; }
+.chart-bar.has-data { background: var(--surface2); border: 1px solid var(--border2); border-bottom: none; }
+.chart-bar.today { background: linear-gradient(to top, var(--accent), rgba(0,229,176,0.5)) !important; border-color: var(--accent) !important; box-shadow: 0 0 10px rgba(0,229,176,0.2); }
+.chart-day { font-size: 10px; color: var(--text3); font-family: var(--mono); }
+.chart-day.today { color: var(--accent); font-weight: 500; }
+.chart-count { font-size: 10px; color: var(--text2); font-family: var(--mono); min-height: 14px; }
+
+/* ── Nav tabs ────────────────────────────────────────────── */
+.nav-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.nav-tab { font-size: 13px; font-weight: 500; padding: 10px 20px; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; background: none; border-top: none; border-left: none; border-right: none; transition: all 0.15s; font-family: var(--sans); letter-spacing: 0.01em; }
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); text-shadow: 0 0 20px rgba(0,229,176,0.2); font-weight: 600; }
+
+/* ── Views ───────────────────────────────────────────────── */
+.view { display: none; }
+.view.visible { display: block; }
+
+/* ── Add form ────────────────────────────────────────────── */
+.add-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; }
+.add-form-title { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 1rem; font-family: var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
+.add-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.add-row2 { display: grid; grid-template-columns: 1fr 1fr 80px auto; gap: 8px; }
+.add-form input, .add-form select { font-size: 13px; padding: 7px 12px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-family: var(--sans); width: 100%; transition: border-color 0.15s; }
+.add-form input:focus, .add-form select:focus { outline: none; border-color: var(--accent); }
+.add-form input::placeholder { color: var(--text3); }
+.add-form select option { background: var(--surface2); }
+.add-btn { font-size: 12px; font-weight: 500; padding: 7px 18px; border-radius: var(--radius); border: 1px solid var(--accent-border); background: var(--accent-dim); color: var(--accent); cursor: pointer; font-family: var(--mono); white-space: nowrap; transition: all 0.15s; }
+.add-btn:hover { background: var(--accent); color: #000; }
+
+/* ── Search ──────────────────────────────────────────────── */
+.search-bar { position: relative; margin-bottom: 10px; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; font-size: 15px; }
+.search-input { width: 100%; padding: 9px 36px 9px 36px; font-size: 13px; border: 1px solid var(--border2); border-radius: var(--radius); background: var(--surface); color: var(--text); font-family: var(--sans); transition: border-color 0.15s; }
+.search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,176,0.08); }
+.search-input::placeholder { color: var(--text3); }
+.search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text3); cursor: pointer; font-size: 18px; display: none; background: none; border: none; line-height: 1; padding: 2px 4px; }
+.search-clear.vis { display: block; }
+.search-info { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 1rem; min-height: 18px; }
+
+/* ── Filter row ──────────────────────────────────────────── */
+.filter-row { display: flex; gap: 6px; margin-bottom: 1.25rem; align-items: center; flex-wrap: wrap; }
+.filter-label { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-right: 2px; }
+.filter-chip { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: var(--sans); font-weight: 500; letter-spacing: 0.02em; }
+.filter-chip.f-key.on { background: var(--blue-dim); border-color: rgba(77,159,255,0.3); color: var(--blue); }
+.filter-chip.f-easy.on { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
+.filter-chip.f-med.on { background: var(--amber-dim); border-color: rgba(245,166,35,0.3); color: var(--amber); }
+.filter-chip.f-done.on { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
+.filter-chip.f-undone.on { background: var(--red-dim); border-color: rgba(255,107,107,0.3); color: var(--red); }
+.kbd-hint { margin-left: auto; display: flex; gap: 8px; align-items: center; font-size: 10px; color: var(--text3); font-family: var(--mono); flex-wrap: wrap; }
+kbd { font-size: 10px; padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text3); font-family: var(--mono); }
+
+/* ── Phase tabs ──────────────────────────────────────────── */
+.phase-tabs { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.phase-tab { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: var(--sans); display: flex; align-items: center; gap: 5px; letter-spacing: 0.01em; }
+.phase-tab:hover { border-color: var(--border2); color: var(--text); }
+.phase-tab.active { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); box-shadow: 0 0 12px rgba(0,229,176,0.12); }
+.tab-badge { font-size: 10px; opacity: 0.6; }
+.phase-tab.active .tab-badge { opacity: 0.8; }
+.phase-tab.all-done .tab-badge { color: var(--accent); opacity: 1; }
+
+/* ── Sections ────────────────────────────────────────────── */
+.phase { display: none; }
+.phase.visible { display: block; }
+.section { margin-bottom: 1.5rem; }
+.section-header { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; padding: 7px 12px; background: var(--surface2); border-radius: var(--radius); border: 1px solid var(--border); font-family: var(--sans); cursor: pointer; user-select: none; transition: all 0.12s; }
+.section-header:hover { color: var(--text); border-color: var(--border2); }
+.section-chevron { font-size: 9px; flex-shrink: 0; transition: transform 0.18s ease; display: inline-block; color: var(--text3); }
+.section.collapsed .section-chevron { transform: rotate(-90deg); }
+.section-badge { margin-left: auto; font-size: 10px; padding: 1px 8px; border-radius: 99px; background: var(--surface3); color: var(--text3); border: 1px solid var(--border); font-family: var(--mono); font-weight: 500; }
+.section-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.2s ease; }
+.section.collapsed .section-body { grid-template-rows: 0fr; }
+.section-body-inner { overflow: hidden; }
+
+/* ── Items ───────────────────────────────────────────────── */
+.item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: var(--radius); cursor: pointer; transition: all 0.12s; border: 1px solid transparent; border-left: 2px solid transparent; margin-bottom: 2px; }
+.item:hover { background: var(--surface2); border-left-color: var(--border2); }
+.item.done { background: var(--accent-dim); border-color: var(--accent-border); border-left-color: var(--accent); }
+.item.has-note { border-left-color: var(--amber) !important; }
+.item-check { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; border: 1.5px solid var(--border2); background: var(--surface); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.item.done .item-check { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(0,229,176,0.35); }
+.checkmark { display: none; }
+.item.done .checkmark { display: block; }
+.item-body { flex: 1; min-width: 0; }
+.item-name { font-size: 13.5px; color: var(--text); line-height: 1.45; font-weight: 450; }
+.item.done .item-name { color: var(--text2); text-decoration: line-through; text-decoration-color: var(--text3); font-weight: 400; }
+.item-meta { font-size: 11px; color: var(--text3); margin-top: 3px; font-family: var(--mono); letter-spacing: 0.01em; }
+.item-note-area { margin-top: 8px; display: none; }
+.item-note-area.open { display: block; }
+.item-note { width: 100%; padding: 7px 10px; font-size: 12px; border: 1px solid var(--border2); border-radius: 6px; background: var(--surface2); color: var(--text); font-family: var(--sans); resize: vertical; min-height: 52px; transition: border-color 0.15s; line-height: 1.5; }
+.item-note:focus { outline: none; border-color: var(--amber); }
+.item-note::placeholder { color: var(--text3); font-style: italic; }
+.note-saved { font-size: 10px; color: var(--accent); font-family: var(--mono); margin-top: 3px; opacity: 0; transition: opacity 0.3s; }
+.note-saved.show { opacity: 1; }
+.item-actions { display: flex; gap: 3px; flex-shrink: 0; padding-top: 2px; }
+.item-action { font-size: 13px; color: var(--text3); padding: 2px 5px; border-radius: 4px; opacity: 0; transition: opacity 0.12s, color 0.12s, background 0.12s; cursor: pointer; background: none; border: none; line-height: 1; }
+.item:hover .item-action { opacity: 1; }
+.item-action.note-on { opacity: 1; color: var(--amber); }
+.item-action.note-act:hover { color: var(--amber); background: var(--amber-dim); }
+.item-action.del-act:hover { color: var(--red); background: var(--red-dim); }
+.tag { font-size: 10px; padding: 1px 7px; border-radius: 4px; margin-left: 6px; display: inline-block; vertical-align: middle; font-family: var(--mono); }
+.tag-key { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(77,159,255,0.2); }
+.tag-easy { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+.tag-med { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.2); }
+
+/* ── Search results ──────────────────────────────────────── */
+.search-group { margin-bottom: 1.5rem; }
+.search-group-hdr { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.search-group-hdr em { color: var(--accent); font-style: normal; }
+mark { background: var(--amber-dim); color: var(--amber); border-radius: 2px; padding: 0 2px; font-style: normal; }
+
+/* ── Revision view ───────────────────────────────────────── */
+.rev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+.rev-section-title { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--mono); margin-bottom: 10px; margin-top: 1.5rem; }
+.rev-section-title:first-child { margin-top: 0; }
+.rev-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+.rev-card-title { font-size: 12px; font-weight: 500; color: var(--accent); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); font-family: var(--mono); letter-spacing: 0.03em; }
+.rev-item { font-size: 12px; color: var(--text2); padding: 4px 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
+.rev-item:last-child { border-bottom: none; }
+.rev-item strong { color: var(--text); font-weight: 500; }
+.rev-item code { font-family: var(--mono); font-size: 11px; color: var(--accent); background: var(--surface2); padding: 1px 5px; border-radius: 3px; }
+.rev-code { font-family: var(--mono); font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px; margin-top: 6px; color: var(--text2); line-height: 1.7; white-space: pre; overflow-x: auto; }
+.rev-code .kw { color: var(--blue); }
+.rev-code .acc { color: var(--accent); }
+.rev-code .cm { color: var(--text3); }
+.checklist-step { display: flex; gap: 8px; font-size: 12px; color: var(--text2); padding: 4px 0; border-bottom: 1px solid var(--border); }
+.checklist-step:last-child { border-bottom: none; }
+.step-num { font-family: var(--mono); font-size: 10px; color: var(--accent); flex-shrink: 0; margin-top: 2px; min-width: 16px; }
+.story-item { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text2); }
+.story-item:last-child { border-bottom: none; }
+.story-item strong { color: var(--text); font-weight: 500; }
+.story-status { font-family: var(--mono); font-size: 10px; margin-right: 6px; }
+.s-done { color: var(--accent); }
+.s-prog { color: var(--amber); }
+.s-todo { color: var(--text3); }
+
+/* ── Toast ───────────────────────────────────────────────── */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 10px 16px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow); z-index: 1000; transition: transform 0.25s ease; white-space: nowrap; overflow: hidden; }
+.toast.vis { transform: translateX(-50%) translateY(0); }
+.toast-msg { font-size: 13px; color: var(--text2); }
+.toast-undo { font-size: 12px; font-weight: 500; color: var(--accent); cursor: pointer; font-family: var(--mono); background: none; border: none; padding: 0; }
+.toast-undo:hover { text-decoration: underline; }
+.toast-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+
+/* ── Dropdown menu ───────────────────────────────────────── */
+.menu-wrap { position: relative; }
+.menu-btn { font-size: 18px; letter-spacing: 2px; }
+.menu-dropdown { position: absolute; right: 0; top: calc(100% + 8px); background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 5px; min-width: 220px; box-shadow: var(--shadow); z-index: 300; display: none; }
+.menu-dropdown.open { display: block; animation: dropIn 0.12s ease; }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.menu-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 12px; border-radius: var(--radius); font-size: 13px; color: var(--text2); cursor: pointer; border: none; background: none; font-family: var(--sans); text-align: left; transition: background 0.1s, color 0.1s; }
+.menu-item:hover { background: var(--surface2); color: var(--text); }
+.menu-icon { width: 16px; text-align: center; flex-shrink: 0; font-size: 14px; opacity: 0.8; }
+.menu-right { margin-left: auto; font-size: 11px; color: var(--text3); font-family: var(--mono); }
+.menu-sep { height: 1px; background: var(--border); margin: 4px 6px; }
+.menu-item.danger:hover { background: var(--red-dim); color: var(--red); }
+.menu-item.danger:hover .menu-icon { opacity: 1; }
+
+/* ── Sidebar overrides ───────────────────────────────────── */
+.sidebar .add-row { grid-template-columns: 1fr; }
+.sidebar .add-row2 { grid-template-columns: 1fr 1fr; }
+.sidebar .stat { padding: 1rem 1rem 0.75rem; }
+.sidebar .stat-val { font-size: 26px; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .app-body { flex-direction: column; }
+  .sidebar { width: 100%; position: static; max-height: none; flex-direction: row; flex-wrap: wrap; }
+  .sidebar .timer-bar { flex: 1 1 280px; }
+  .sidebar .stats-row { flex: 1 1 280px; grid-template-columns: repeat(4, 1fr); }
+  .sidebar .chart-section { flex: 1 1 100%; }
+  .sidebar .nav-tabs { flex: 1 1 100%; }
+  .sidebar .add-form { flex: 1 1 100%; }
+}
+@media (max-width: 640px) {
+  .rev-grid { grid-template-columns: 1fr; }
+  .sidebar .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .sidebar .add-row2 { grid-template-columns: 1fr 1fr; }
+  .timer-hint { display: none; }
+  .kbd-hint { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="bg-orb-1"></div>
+
+<!-- NYC: Brooklyn Bridge + Manhattan skyline silhouette -->
+<div class="bg-bkb" aria-hidden="true">
+  <svg viewBox="0 0 1200 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="east-river" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(40,55,120,0)"/>
+        <stop offset="100%" stop-color="rgba(30,45,100,0.08)"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Manhattan skyline silhouette (background, very faint) -->
+    <g fill="rgba(70,60,100,0.11)" stroke="none">
+      <!-- Lower Manhattan left cluster -->
+      <rect x="30" y="90" width="22" height="95"/>
+      <rect x="56" y="75" width="18" height="110"/>
+      <rect x="78" y="100" width="26" height="85"/>
+      <rect x="108" y="82" width="20" height="103"/>
+      <rect x="132" y="110" width="24" height="75"/>
+      <!-- One WTC -->
+      <rect x="162" y="42" width="20" height="143"/>
+      <polygon points="172,10 162,55 182,55"/>
+      <!-- More lower Manhattan -->
+      <rect x="187" y="88" width="22" height="97"/>
+      <rect x="213" y="70" width="18" height="115"/>
+      <rect x="235" y="95" width="28" height="90"/>
+      <rect x="267" y="80" width="20" height="105"/>
+      <rect x="291" y="112" width="24" height="73"/>
+      <rect x="319" y="95" width="18" height="90"/>
+      <rect x="341" y="108" width="22" height="77"/>
+      <!-- Gap around bridge towers -->
+      <rect x="700" y="95" width="20" height="90"/>
+      <rect x="724" y="78" width="24" height="107"/>
+      <!-- Midtown left of right tower -->
+      <rect x="752" y="88" width="18" height="97"/>
+      <!-- Empire State style -->
+      <rect x="776" y="52" width="26" height="133"/>
+      <rect x="780" y="36" width="18" height="34"/>
+      <rect x="784" y="22" width="10" height="22"/>
+      <!-- Chrysler style -->
+      <rect x="808" y="65" width="22" height="120"/>
+      <polygon points="819,42 808,72 830,72"/>
+      <!-- More midtown -->
+      <rect x="836" y="82" width="28" height="103"/>
+      <rect x="868" y="72" width="22" height="113"/>
+      <rect x="894" y="90" width="30" height="95"/>
+      <rect x="928" y="105" width="20" height="80"/>
+      <rect x="952" y="88" width="24" height="97"/>
+      <rect x="980" y="100" width="28" height="85"/>
+      <rect x="1012" y="115" width="18" height="70"/>
+      <rect x="1034" y="95" width="22" height="90"/>
+      <rect x="1060" y="110" width="26" height="75"/>
+      <rect x="1090" y="98" width="20" height="87"/>
+      <rect x="1114" y="115" width="24" height="70"/>
+      <rect x="1142" y="102" width="18" height="83"/>
+      <rect x="1165" y="118" width="22" height="67"/>
+    </g>
+
+    <!-- Brooklyn Bridge -->
+    <g stroke="rgba(105,88,65,0.26)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+      <!-- Approach cables from anchorages to towers -->
+      <path d="M0,118 L392,28" stroke-width="1.6"/>
+      <path d="M1200,118 L808,28" stroke-width="1.6"/>
+      <!-- Back approach cables (depth) -->
+      <path d="M0,122 L392,32" stroke-width="0.9" opacity="0.4"/>
+      <path d="M1200,122 L808,32" stroke-width="0.9" opacity="0.4"/>
+
+      <!-- Main suspension cable -->
+      <path d="M392,28 Q600,155 808,28" stroke-width="2.4"/>
+      <!-- Secondary cable (depth) -->
+      <path d="M392,32 Q600,160 808,32" stroke-width="1" opacity="0.35"/>
+
+      <!-- Left tower — Gothic stone tower -->
+      <rect x="381" y="28" width="22" height="160" rx="2"
+            fill="rgba(85,70,52,0.14)" stroke="rgba(120,100,75,0.32)" stroke-width="1.3"/>
+      <!-- Left tower arch openings (gothic pointed) -->
+      <path d="M386,120 L386,162 Q392,155 398,162 L398,120 Q392,112 386,120"
+            fill="rgba(0,0,8,0.12)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <path d="M387,80 L387,112 Q392,106 397,112 L397,80 Q392,73 387,80"
+            fill="rgba(0,0,8,0.10)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <!-- Left tower cross-pieces -->
+      <rect x="379" y="60" width="26" height="6" rx="1.5"
+            fill="rgba(85,70,52,0.12)" stroke="rgba(120,100,75,0.28)" stroke-width="0.9"/>
+
+      <!-- Right tower — Gothic stone tower -->
+      <rect x="797" y="28" width="22" height="160" rx="2"
+            fill="rgba(85,70,52,0.14)" stroke="rgba(120,100,75,0.32)" stroke-width="1.3"/>
+      <path d="M802,120 L802,162 Q808,155 814,162 L814,120 Q808,112 802,120"
+            fill="rgba(0,0,8,0.12)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <path d="M803,80 L803,112 Q808,106 813,112 L813,80 Q808,73 803,80"
+            fill="rgba(0,0,8,0.10)" stroke="rgba(120,100,75,0.2)" stroke-width="0.8"/>
+      <rect x="795" y="60" width="26" height="6" rx="1.5"
+            fill="rgba(85,70,52,0.12)" stroke="rgba(120,100,75,0.28)" stroke-width="0.9"/>
+
+      <!-- Diagonal stay cables (Brooklyn Bridge's signature harp pattern) -->
+      <!-- From LEFT tower, fanning left toward anchorage -->
+      <line x1="390" y1="35" x2="130" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="180" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="230" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="290" y2="188" stroke-width="0.85"/>
+      <line x1="390" y1="35" x2="340" y2="188" stroke-width="0.85"/>
+      <!-- From LEFT tower, fanning right toward center span -->
+      <line x1="392" y1="35" x2="460" y2="188" stroke-width="0.85"/>
+      <line x1="392" y1="35" x2="510" y2="188" stroke-width="0.85"/>
+      <line x1="392" y1="35" x2="555" y2="188" stroke-width="0.85"/>
+      <line x1="392" y1="35" x2="592" y2="188" stroke-width="0.85"/>
+
+      <!-- From RIGHT tower, fanning left toward center span -->
+      <line x1="808" y1="35" x2="608" y2="188" stroke-width="0.85"/>
+      <line x1="808" y1="35" x2="645" y2="188" stroke-width="0.85"/>
+      <line x1="808" y1="35" x2="690" y2="188" stroke-width="0.85"/>
+      <line x1="808" y1="35" x2="740" y2="188" stroke-width="0.85"/>
+      <!-- From RIGHT tower, fanning right toward anchorage -->
+      <line x1="810" y1="35" x2="860" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="910" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="960" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="1020" y2="188" stroke-width="0.85"/>
+      <line x1="810" y1="35" x2="1070" y2="188" stroke-width="0.85"/>
+
+      <!-- Vertical suspender cables from main catenary to deck -->
+      <!-- y = 28 + 127*(1 - ((x-600)/208)^2) for x in [392,808] -->
+      <line x1="420" y1="52"  x2="420" y2="188" stroke-width="0.7"/>
+      <line x1="450" y1="76"  x2="450" y2="188" stroke-width="0.7"/>
+      <line x1="480" y1="99"  x2="480" y2="188" stroke-width="0.7"/>
+      <line x1="510" y1="118" x2="510" y2="188" stroke-width="0.7"/>
+      <line x1="540" y1="134" x2="540" y2="188" stroke-width="0.7"/>
+      <line x1="570" y1="146" x2="570" y2="188" stroke-width="0.7"/>
+      <line x1="600" y1="152" x2="600" y2="188" stroke-width="0.7"/>
+      <line x1="630" y1="152" x2="630" y2="188" stroke-width="0.7"/>
+      <line x1="660" y1="146" x2="660" y2="188" stroke-width="0.7"/>
+      <line x1="690" y1="134" x2="690" y2="188" stroke-width="0.7"/>
+      <line x1="720" y1="118" x2="720" y2="188" stroke-width="0.7"/>
+      <line x1="750" y1="99"  x2="750" y2="188" stroke-width="0.7"/>
+      <line x1="780" y1="76"  x2="780" y2="188" stroke-width="0.7"/>
+
+      <!-- Road deck -->
+      <line x1="0" y1="188" x2="1200" y2="188" stroke-width="2.8" opacity="0.9"/>
+      <line x1="0" y1="194" x2="1200" y2="194" stroke-width="0.6" opacity="0.3"/>
+    </g>
+
+    <!-- East River water shimmer -->
+    <rect x="0" y="188" width="1200" height="42" fill="url(#east-river)"/>
+  </svg>
+</div>
+
+<div class="bg-haze" aria-hidden="true"></div>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="logo">// interview prep</div>
+      <div class="title">Mugdha Deshmukh</div>
+      <div class="subtitle">Data Analyst · Analytics Engineer — SQL · Python · Tableau · A/B Testing</div>
+    </div>
+    <div class="header-right">
+      <div class="header-badges">
+        <div class="timeline-badge">2026 Job Search</div>
+        <div class="countdown-badge" id="countdown">—</div>
+        <div class="menu-wrap">
+          <button class="icon-btn menu-btn" id="menu-btn" title="Settings">···</button>
+          <div class="menu-dropdown" id="menu-dropdown">
+            <button class="menu-item" id="menu-theme">
+              <span class="menu-icon" id="menu-theme-icon">◑</span>
+              <span>Theme</span>
+              <span class="menu-right" id="menu-theme-val">auto</span>
+            </button>
+            <div class="menu-sep"></div>
+            <button class="menu-item" id="menu-export">
+              <span class="menu-icon">↓</span>
+              <span>Export progress</span>
+            </button>
+            <label class="menu-item" style="cursor:pointer">
+              <span class="menu-icon">↑</span>
+              <span>Import progress</span>
+              <input type="file" id="import-file" accept=".json" style="display:none">
+            </label>
+            <div class="menu-sep"></div>
+            <button class="menu-item" id="menu-kbd">
+              <span class="menu-icon">⌨</span>
+              <span>Keyboard shortcuts</span>
+            </button>
+            <div class="menu-sep"></div>
+            <button class="menu-item danger" id="menu-reset">
+              <span class="menu-icon">✕</span>
+              <span>Reset all progress</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="app-body">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div class="timer-bar">
+  <div class="timer-col">
+    <div class="timer-label">session</div>
+    <div class="timer-display" id="timer-disp">00:00:00</div>
+  </div>
+  <div class="timer-controls">
+    <button class="timer-btn start" id="timer-start">▶ Start</button>
+    <button class="timer-btn" id="timer-reset">↺ Reset</button>
+  </div>
+  <div class="timer-bottom-row">
+    <div class="timer-col">
+      <div class="timer-label">today</div>
+      <div class="timer-val" id="timer-today">0h 0m</div>
+    </div>
+    <div class="timer-col">
+      <div class="timer-label">all time</div>
+      <div class="timer-val" id="timer-all">0h 0m</div>
+    </div>
+    <div class="timer-hint">Press <kbd>S</kbd></div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-label">total</div>
+    <div class="stat-val" id="s-total">0</div>
+    <div class="stat-sub">topics across all areas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">done</div>
+    <div class="stat-val" id="s-done">0</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="s-bar" style="width:0%"></div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">progress</div>
+    <div class="stat-val" id="s-pct">0%</div>
+    <div class="stat-sub">overall completion</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">remaining</div>
+    <div class="stat-val" id="s-rem">0</div>
+    <div class="stat-sub" id="s-pace">to go</div>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="chart-header">
+    <div class="chart-title">completions — last 7 days</div>
+    <div class="chart-week-total" id="chart-total"></div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-bars" id="chart-bars"></div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" data-view="tracker">Tracker</button>
+  <button class="nav-tab" data-view="revision">Quick reference</button>
+</div>
+
+<div class="add-form">
+  <div class="add-form-title">+ add custom topic</div>
+  <div class="add-row">
+    <input id="add-name" placeholder="Topic name" />
+    <input id="add-meta" placeholder="Notes or source (optional)" />
+  </div>
+  <div class="add-row2">
+    <select id="add-phase">
+      <option value="sql">SQL</option>
+      <option value="python">Python</option>
+      <option value="tableau">Tableau / BI</option>
+      <option value="dw">Data Warehouse</option>
+      <option value="sysdesign">System Design</option>
+      <option value="metrics">Metrics & Biz</option>
+      <option value="ab">A/B Testing</option>
+      <option value="grammar">Grammar</option>
+      <option value="practice">Practice</option>
+      <option value="custom">Custom</option>
+    </select>
+    <input id="add-section" placeholder="Section (optional)" />
+    <select id="add-tag">
+      <option value="">tag</option>
+      <option value="key">key</option>
+      <option value="easy">easy</option>
+      <option value="med">med</option>
+    </select>
+    <button class="add-btn" id="add-btn">+ Add</button>
+  </div>
+</div>
+
+</div><!-- /sidebar -->
+
+<!-- MAIN PANEL -->
+<div class="main-panel">
+
+<div class="view visible" id="view-tracker">
+  <div class="search-bar">
+    <span class="search-icon">⌕</span>
+    <input class="search-input" id="search-input" placeholder="Search topics… (press / to focus)" />
+    <button class="search-clear" id="search-clear">×</button>
+  </div>
+  <div class="search-info" id="search-info"></div>
+
+  <div class="filter-row">
+    <span class="filter-label">filter:</span>
+    <button class="filter-chip f-key" data-f="key">key</button>
+    <button class="filter-chip f-easy" data-f="easy">easy</button>
+    <button class="filter-chip f-med" data-f="med">med</button>
+    <button class="filter-chip f-done" data-f="done">done</button>
+    <button class="filter-chip f-undone" data-f="undone">todo</button>
+    <div class="kbd-hint">
+      <kbd>/</kbd> search &nbsp;
+      <kbd>S</kbd> timer &nbsp;
+      <kbd>1</kbd>–<kbd>9</kbd> phases &nbsp;
+      <kbd>Esc</kbd> clear
+    </div>
+  </div>
+
+  <div id="normal-view">
+    <div class="phase-tabs" id="phase-tabs"></div>
+    <div id="phases-container"></div>
+  </div>
+  <div id="search-results" style="display:none"></div>
+</div>
+
+<!-- REVISION / QUICK REFERENCE VIEW -->
+<div class="view" id="view-revision">
+
+  <div class="rev-section-title">SQL essentials</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">window functions</div>
+      <div class="rev-item"><code>ROW_NUMBER()</code> — unique rank, no ties</div>
+      <div class="rev-item"><code>RANK()</code> — ties get same rank, next rank skipped</div>
+      <div class="rev-item"><code>DENSE_RANK()</code> — ties get same rank, no gap after</div>
+      <div class="rev-item"><code>LAG(col,1)</code> — previous row value in partition</div>
+      <div class="rev-item"><code>LEAD(col,1)</code> — next row value in partition</div>
+      <div class="rev-item"><code>SUM(col) OVER (ORDER BY date)</code> — running total</div>
+      <div class="rev-item"><strong>PARTITION BY</strong> resets window per group; GROUP BY collapses rows</div>
+      <div class="rev-code"><span class="kw">SELECT</span> user_id, date, revenue,
+  <span class="acc">SUM</span>(revenue) <span class="kw">OVER</span> (
+    <span class="kw">PARTITION BY</span> user_id
+    <span class="kw">ORDER BY</span> date
+  ) <span class="kw">AS</span> running_total
+<span class="kw">FROM</span> orders;</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">CTEs & subquery patterns</div>
+      <div class="rev-item"><strong>CTE (WITH)</strong> — named, reusable, readable. Prefer over nested subqueries</div>
+      <div class="rev-item"><strong>Correlated subquery</strong> — references outer query; runs once per row (slow)</div>
+      <div class="rev-item"><strong>Subquery in FROM</strong> — inline view, runs once (better)</div>
+      <div class="rev-item"><strong>EXISTS vs IN</strong> — EXISTS short-circuits; IN materializes the set</div>
+      <div class="rev-code"><span class="kw">WITH</span> monthly_rev <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> user_id,
+    <span class="acc">DATE_TRUNC</span>(<span class="acc">'month'</span>, date) <span class="kw">AS</span> mo,
+    <span class="acc">SUM</span>(revenue) <span class="kw">AS</span> rev
+  <span class="kw">FROM</span> orders
+  <span class="kw">GROUP BY</span> 1, 2
+)
+<span class="kw">SELECT</span> *, <span class="acc">LAG</span>(rev) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> user_id <span class="kw">ORDER BY</span> mo)
+<span class="kw">FROM</span> monthly_rev;</div>
+    </div>
+  </div>
+
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">join quick ref</div>
+      <div class="rev-item"><strong>INNER JOIN</strong> — only matching rows in both tables</div>
+      <div class="rev-item"><strong>LEFT JOIN</strong> — all left rows, NULLs for no match on right</div>
+      <div class="rev-item"><strong>FULL OUTER</strong> — all rows from both, NULLs where no match</div>
+      <div class="rev-item"><strong>SELF JOIN</strong> — table joined to itself; needs alias</div>
+      <div class="rev-item"><strong>Use JOIN when</strong> — combining related tables; use subquery when filtering by aggregation</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">conditional aggregation</div>
+      <div class="rev-item">Count only rows meeting a condition without a subquery</div>
+      <div class="rev-code"><span class="kw">SELECT</span>
+  <span class="acc">COUNT</span>(<span class="kw">CASE WHEN</span> status=<span class="acc">'paid'</span> <span class="kw">THEN</span> 1 <span class="kw">END</span>) <span class="kw">AS</span> paid,
+  <span class="acc">COUNT</span>(<span class="kw">CASE WHEN</span> status=<span class="acc">'refund'</span> <span class="kw">THEN</span> 1 <span class="kw">END</span>) <span class="kw">AS</span> refunds,
+  <span class="acc">SUM</span>(<span class="kw">CASE WHEN</span> status=<span class="acc">'paid'</span> <span class="kw">THEN</span> amount <span class="kw">ELSE</span> 0 <span class="kw">END</span>) <span class="kw">AS</span> revenue
+<span class="kw">FROM</span> transactions;</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Python / Pandas cheat sheet</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">pandas core patterns</div>
+      <div class="rev-item"><code>df.groupby('col').agg({'val':'sum'})</code> — group + aggregate</div>
+      <div class="rev-item"><code>df.merge(df2, on='id', how='left')</code> — left join</div>
+      <div class="rev-item"><code>df['col'].fillna(df['col'].median())</code> — fill missing</div>
+      <div class="rev-item"><code>pd.to_datetime(df['date'])</code> — parse dates</div>
+      <div class="rev-item"><code>df.sort_values('col', ascending=False)</code> — sort</div>
+      <div class="rev-item"><code>df[df['col'] > 100]</code> — boolean filter</div>
+      <div class="rev-code">df.<span class="acc">groupby</span>(<span class="acc">'user_id'</span>).agg(
+  total_spend=(<span class="acc">'amount'</span>, <span class="acc">'sum'</span>),
+  order_count=(<span class="acc">'order_id'</span>, <span class="acc">'count'</span>),
+  avg_order=(<span class="acc">'amount'</span>, <span class="acc">'mean'</span>)
+).reset_index()</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">EDA checklist</div>
+      <div class="checklist-step"><span class="step-num">1</span><span><code>df.shape</code>, <code>df.info()</code>, <code>df.describe()</code> — understand structure</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span><code>df.isnull().sum()</code> — check missing values</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span><code>df.duplicated().sum()</code> — check duplicates</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span><code>df['col'].value_counts()</code> — distribution of categoricals</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>Check date range, outliers with <code>describe()</code> percentiles</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>Correlation matrix for numeric columns</span></div>
+      <div class="checklist-step"><span class="step-num">7</span><span>State findings + hypotheses before modeling</span></div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">A/B testing framework</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">experiment design steps</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Define hypothesis — what change, what expected effect</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>Choose primary metric + guardrail metrics</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>Calculate required sample size (power analysis)</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>Randomize users into control / treatment groups</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>Run experiment until sample size reached</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>Check p-value against α=0.05; check CI does not cross 0</span></div>
+      <div class="checklist-step"><span class="step-num">7</span><span>Check for novelty effect, segment breakdowns</span></div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">stats quick ref</div>
+      <div class="rev-item"><strong>p-value</strong> — probability of seeing this result if H₀ is true. p &lt; 0.05 → reject H₀</div>
+      <div class="rev-item"><strong>Type I error (α)</strong> — false positive: reject H₀ when true. Usually 5%</div>
+      <div class="rev-item"><strong>Type II error (β)</strong> — false negative: fail to reject H₀ when false</div>
+      <div class="rev-item"><strong>Power (1−β)</strong> — probability of detecting a true effect. Target 80%</div>
+      <div class="rev-item"><strong>CI</strong> — if 95% CI excludes 0, result is significant at α=0.05</div>
+      <div class="rev-item"><strong>p-hacking</strong> — peeking at results early inflates false positive rate</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Metrics & business sense</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">metric drop diagnosis framework</div>
+      <div class="checklist-step"><span class="step-num">1</span><span>Confirm the drop is real — check data pipeline, logging issues</span></div>
+      <div class="checklist-step"><span class="step-num">2</span><span>Scope it — which segment? platform, region, user cohort?</span></div>
+      <div class="checklist-step"><span class="step-num">3</span><span>Timeline — when did it start? Any deploys, campaigns, holidays?</span></div>
+      <div class="checklist-step"><span class="step-num">4</span><span>Funnel breakdown — where in the funnel is the drop?</span></div>
+      <div class="checklist-step"><span class="step-num">5</span><span>External factors — competitor, seasonality, macro?</span></div>
+      <div class="checklist-step"><span class="step-num">6</span><span>Propose hypothesis + next action</span></div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">key metric definitions</div>
+      <div class="rev-item"><strong>DAU/MAU ratio</strong> — stickiness. Higher = more engaged users</div>
+      <div class="rev-item"><strong>Retention D7/D30</strong> — % users who returned 7/30 days after first use</div>
+      <div class="rev-item"><strong>LTV</strong> — avg revenue per user over their lifetime</div>
+      <div class="rev-item"><strong>CAC</strong> — cost to acquire one customer. LTV/CAC &gt; 3 is healthy</div>
+      <div class="rev-item"><strong>Conversion rate</strong> — % users completing desired action in funnel</div>
+      <div class="rev-item"><strong>North Star</strong> — single metric that best captures delivered value</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Data modeling reference</div>
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-card-title">star schema vs snowflake</div>
+      <div class="rev-item"><strong>Star schema</strong> — fact table + denormalized dimension tables. Fast queries, simple joins</div>
+      <div class="rev-item"><strong>Snowflake schema</strong> — dimensions further normalized. Less redundancy, more joins</div>
+      <div class="rev-item"><strong>Fact table</strong> — measures/events (revenue, clicks). Foreign keys to dims</div>
+      <div class="rev-item"><strong>Dimension table</strong> — descriptive attributes (user, product, date)</div>
+      <div class="rev-item"><strong>Grain</strong> — the level of detail one row represents. Define first</div>
+      <div class="rev-item"><strong>Slowly Changing Dim</strong> — Type 1 (overwrite), Type 2 (history rows)</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-card-title">modern data stack</div>
+      <div class="rev-item"><strong>Ingestion</strong> — Fivetran, Airbyte: pull source data into warehouse</div>
+      <div class="rev-item"><strong>Warehouse</strong> — BigQuery / Snowflake / Redshift: store + compute</div>
+      <div class="rev-item"><strong>Transform</strong> — dbt: SQL-based modeling, tests, documentation</div>
+      <div class="rev-item"><strong>BI layer</strong> — Tableau / Looker / Power BI: dashboards for stakeholders</div>
+      <div class="rev-item"><strong>Partitioning</strong> — divide table by date/region to limit scan cost</div>
+      <div class="rev-item"><strong>Materialized view</strong> — pre-computed query result; refreshed on schedule</div>
+    </div>
+  </div>
+
+  <div class="rev-section-title">Behavioral stories</div>
+  <div class="rev-card" style="margin-bottom:1.5rem">
+    <div class="rev-card-title">stories to prepare — STAR format</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Impact through SQL / analysis</strong> — a query or dashboard that changed a business decision</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Data quality / pipeline issue</strong> — found and fixed bad data, stakeholder trust impact</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Ambiguous business question</strong> — turned vague ask into clear metric + insight</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Cross-functional collaboration</strong> — worked with PM/engineering to instrument or ship a feature</div>
+    <div class="story-item"><span class="story-status s-todo">❌</span><strong>Influencing without authority</strong> — used data to push back on or change a decision</div>
+  </div>
+
+</div><!-- /view-revision -->
+
+</div><!-- /main-panel -->
+</div><!-- /app-body -->
+</div><!-- /container -->
+
+<div class="toast" id="toast">
+  <span class="toast-msg" id="toast-msg"></span>
+  <button class="toast-undo" id="toast-undo">Undo</button>
+  <div class="toast-progress" id="toast-prog" style="width:100%"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════════════
+const PHASES = [
+  { id:'sql', label:'SQL', sections:[
+    { name:'Fundamentals', items:[
+      {id:'sql_f1',name:'SELECT, WHERE, ORDER BY',tag:'easy'},
+      {id:'sql_f2',name:'DISTINCT, LIMIT'},
+      {id:'sql_f3',name:'AND / OR / NOT'},
+      {id:'sql_f4',name:'IN, BETWEEN, LIKE'},
+      {id:'sql_f5',name:'CASE WHEN expressions'},
+      {id:'sql_f6',name:'NULL handling — IS NULL, COALESCE',tag:'key'},
+    ]},
+    { name:'Joins — High Priority', items:[
+      {id:'sql_j1',name:'INNER JOIN',tag:'key'},
+      {id:'sql_j2',name:'LEFT / RIGHT JOIN',tag:'key'},
+      {id:'sql_j3',name:'FULL OUTER JOIN'},
+      {id:'sql_j4',name:'SELF JOIN'},
+      {id:'sql_j5',name:'Joining multiple tables'},
+      {id:'sql_j6',name:'Join vs Subquery — when to use which',tag:'key'},
+    ]},
+    { name:'Aggregations', items:[
+      {id:'sql_a1',name:'COUNT, SUM, AVG, MIN, MAX'},
+      {id:'sql_a2',name:'GROUP BY'},
+      {id:'sql_a3',name:'HAVING vs WHERE',tag:'key'},
+      {id:'sql_a4',name:'Grouping on multiple columns'},
+      {id:'sql_a5',name:'Conditional aggregation — COUNT(CASE WHEN …)',tag:'key'},
+    ]},
+    { name:'Window Functions — Must Have', items:[
+      {id:'sql_w1',name:'ROW_NUMBER()',tag:'key'},
+      {id:'sql_w2',name:'RANK(), DENSE_RANK()',tag:'key'},
+      {id:'sql_w3',name:'LAG(), LEAD()',tag:'key'},
+      {id:'sql_w4',name:'Running totals — SUM OVER ORDER BY',tag:'key'},
+      {id:'sql_w5',name:'Moving averages'},
+      {id:'sql_w6',name:'PARTITION BY vs GROUP BY — core difference',tag:'key'},
+    ]},
+    { name:'Subqueries & CTEs', items:[
+      {id:'sql_c1',name:'Correlated subqueries'},
+      {id:'sql_c2',name:'Common Table Expressions — WITH clause',tag:'key'},
+      {id:'sql_c3',name:'Recursive CTEs — basic understanding'},
+    ]},
+    { name:'Advanced SQL', items:[
+      {id:'sql_adv1',name:'Date/time functions — DATE_TRUNC, DATEDIFF, EXTRACT'},
+      {id:'sql_adv2',name:'String functions — CONCAT, SUBSTRING, TRIM'},
+      {id:'sql_adv3',name:'Performance basics — indexes, execution plans'},
+      {id:'sql_adv4',name:'SQL optimization patterns'},
+    ]},
+  ]},
+
+  { id:'python', label:'Python', sections:[
+    { name:'Python Basics', items:[
+      {id:'py_b1',name:'Data types — list, tuple, dict, set'},
+      {id:'py_b2',name:'Loops & conditionals'},
+      {id:'py_b3',name:'Functions & lambda'},
+      {id:'py_b4',name:'List/dict comprehensions',tag:'key'},
+      {id:'py_b5',name:'Error handling — try/except'},
+    ]},
+    { name:'Core Libraries — Pandas & NumPy', items:[
+      {id:'py_lib1',name:'NumPy basics — arrays, vectorized operations'},
+      {id:'py_lib2',name:'Pandas Series & DataFrame',tag:'key'},
+      {id:'py_lib3',name:'Reading CSV / JSON / SQL data'},
+      {id:'py_lib4',name:'Data filtering & sorting'},
+      {id:'py_lib5',name:'Groupby & aggregations',tag:'key'},
+      {id:'py_lib6',name:'Merge / Join DataFrames',tag:'key'},
+    ]},
+    { name:'Data Cleaning', items:[
+      {id:'py_dc1',name:'Handling missing values — fillna, dropna',tag:'key'},
+      {id:'py_dc2',name:'Type conversions'},
+      {id:'py_dc3',name:'Date parsing — pd.to_datetime'},
+      {id:'py_dc4',name:'Outlier detection'},
+      {id:'py_dc5',name:'Feature creation — derived columns'},
+    ]},
+    { name:'Analysis & Logic', items:[
+      {id:'py_an1',name:'Writing reusable functions'},
+      {id:'py_an2',name:'Basic statistics — describe(), mean, std'},
+      {id:'py_an3',name:'Exploratory Data Analysis (EDA)',tag:'key'},
+    ]},
+    { name:'Python for Interviews', items:[
+      {id:'py_int1',name:'Write clean, readable code'},
+      {id:'py_int2',name:'Optimize time & space complexity'},
+      {id:'py_int3',name:'Explain logic clearly while coding'},
+    ]},
+  ]},
+
+  { id:'tableau', label:'Tableau / BI', sections:[
+    { name:'Tableau Basics', items:[
+      {id:'tab_b1',name:'Dimensions vs Measures'},
+      {id:'tab_b2',name:'Calculated fields',tag:'key'},
+      {id:'tab_b3',name:'Filters vs Parameters'},
+      {id:'tab_b4',name:'Aggregations & granularity'},
+    ]},
+    { name:'Visualizations', items:[
+      {id:'tab_v1',name:'Bar, Line, Area charts'},
+      {id:'tab_v2',name:'Heatmaps'},
+      {id:'tab_v3',name:'Scatter plots'},
+      {id:'tab_v4',name:'Dual-axis charts'},
+      {id:'tab_v5',name:'Maps — basic geo visualization'},
+    ]},
+    { name:'Dashboards', items:[
+      {id:'tab_d1',name:'Dashboard actions',tag:'key'},
+      {id:'tab_d2',name:'Drill-downs'},
+      {id:'tab_d3',name:'Tooltips'},
+      {id:'tab_d4',name:'Dynamic filters'},
+    ]},
+    { name:'Business Dashboards', items:[
+      {id:'tab_bd1',name:'KPI dashboards',tag:'key'},
+      {id:'tab_bd2',name:'Executive dashboards'},
+      {id:'tab_bd3',name:'Funnel analysis'},
+      {id:'tab_bd4',name:'Time-series trends',tag:'key'},
+    ]},
+  ]},
+
+  { id:'dw', label:'Data Warehouse', sections:[
+    { name:'Core Concepts', items:[
+      {id:'dw_c1',name:'OLTP vs OLAP — key differences',tag:'key'},
+      {id:'dw_c2',name:'Fact vs Dimension tables',tag:'key'},
+      {id:'dw_c3',name:'Star schema',tag:'key'},
+      {id:'dw_c4',name:'Snowflake schema'},
+    ]},
+    { name:'ETL / ELT', items:[
+      {id:'dw_e1',name:'Data ingestion concepts'},
+      {id:'dw_e2',name:'Transformations'},
+      {id:'dw_e3',name:'Data quality checks',tag:'key'},
+      {id:'dw_e4',name:'Incremental loads'},
+    ]},
+    { name:'Modern Data Stack', items:[
+      {id:'dw_m1',name:'Data warehouse — Snowflake / BigQuery / Redshift',tag:'key'},
+      {id:'dw_m2',name:'BI layer'},
+      {id:'dw_m3',name:'Data marts'},
+      {id:'dw_m4',name:'Semantic / metrics layer'},
+    ]},
+    { name:'Performance Concepts', items:[
+      {id:'dw_p1',name:'Partitioning'},
+      {id:'dw_p2',name:'Indexing'},
+      {id:'dw_p3',name:'Materialized views'},
+    ]},
+  ]},
+
+  { id:'sysdesign', label:'System Design', sections:[
+    { name:'Analytics System Design', items:[
+      {id:'sd_a1',name:'Event tracking system'},
+      {id:'sd_a2',name:'Dashboard backend design'},
+      {id:'sd_a3',name:'Metrics pipeline'},
+      {id:'sd_a4',name:'Real-time vs batch systems',tag:'key'},
+    ]},
+    { name:'Design Questions to Prep', items:[
+      {id:'sd_q1',name:'Design a KPI dashboard',tag:'key'},
+      {id:'sd_q2',name:'Design an A/B testing platform',tag:'key'},
+      {id:'sd_q3',name:'Design data pipeline for user events'},
+      {id:'sd_q4',name:'Design reporting system for executives'},
+    ]},
+    { name:'Concepts', items:[
+      {id:'sd_c1',name:'Data freshness'},
+      {id:'sd_c2',name:'Data latency'},
+      {id:'sd_c3',name:'Scalability'},
+      {id:'sd_c4',name:'Data accuracy vs speed — trade-offs',tag:'key'},
+    ]},
+  ]},
+
+  { id:'metrics', label:'Metrics & Biz', sections:[
+    { name:'Metric Fundamentals', items:[
+      {id:'met_f1',name:'North Star metrics',tag:'key'},
+      {id:'met_f2',name:'Vanity vs actionable metrics',tag:'key'},
+      {id:'met_f3',name:'Leading vs lagging indicators'},
+    ]},
+    { name:'Product Metrics', items:[
+      {id:'met_p1',name:'DAU / WAU / MAU',tag:'key'},
+      {id:'met_p2',name:'Retention & churn',tag:'key'},
+      {id:'met_p3',name:'Conversion rate'},
+      {id:'met_p4',name:'Funnel metrics'},
+      {id:'met_p5',name:'Cohort analysis',tag:'key'},
+    ]},
+    { name:'Business Metrics', items:[
+      {id:'met_b1',name:'Revenue metrics'},
+      {id:'met_b2',name:'ARPU / LTV',tag:'key'},
+      {id:'met_b3',name:'CAC — Customer Acquisition Cost'},
+      {id:'met_b4',name:'Growth rate'},
+    ]},
+    { name:'Interview Questions', items:[
+      {id:'met_i1',name:'Define success metrics for a product',tag:'key'},
+      {id:'met_i2',name:'Diagnose a metric drop — framework',tag:'key'},
+      {id:'met_i3',name:'Prioritize KPIs for a new feature'},
+    ]},
+  ]},
+
+  { id:'ab', label:'A/B Testing', sections:[
+    { name:'Fundamentals', items:[
+      {id:'ab_f1',name:'Hypothesis formulation',tag:'key'},
+      {id:'ab_f2',name:'Control vs treatment'},
+      {id:'ab_f3',name:'Randomization'},
+      {id:'ab_f4',name:'Sample size concepts',tag:'key'},
+    ]},
+    { name:'Statistics', items:[
+      {id:'ab_s1',name:'Mean vs median'},
+      {id:'ab_s2',name:'p-values — interpretation',tag:'key'},
+      {id:'ab_s3',name:'Confidence intervals',tag:'key'},
+      {id:'ab_s4',name:'Type I / Type II errors',tag:'key'},
+      {id:'ab_s5',name:'Statistical significance'},
+    ]},
+    { name:'Practical Scenarios', items:[
+      {id:'ab_p1',name:'Experiment design end-to-end',tag:'key'},
+      {id:'ab_p2',name:'Metric selection for an experiment'},
+      {id:'ab_p3',name:'Interpreting results correctly'},
+      {id:'ab_p4',name:'Common pitfalls — novelty effect, p-hacking',tag:'key'},
+    ]},
+  ]},
+
+  { id:'grammar', label:'Grammar', sections:[
+    { name:'Phase 1 — Parts of Speech', items:[
+      {id:'gr_1a',name:'Nouns & Pronouns'},
+      {id:'gr_1b',name:'Verbs — main vs helping'},
+      {id:'gr_1c',name:'Adjectives & Adverbs'},
+      {id:'gr_1d',name:'Prepositions & Conjunctions'},
+    ]},
+    { name:'Phase 1 — Sentence Structure', items:[
+      {id:'gr_1e',name:'Subject & Predicate'},
+      {id:'gr_1f',name:'Objects — direct & indirect'},
+      {id:'gr_1g',name:'Articles — a, an, the (critical for Indian speakers)',tag:'key'},
+    ]},
+    { name:'Phase 2 — Tense Mastery', items:[
+      {id:'gr_2a',name:'Present — simple, continuous, perfect',tag:'key'},
+      {id:'gr_2b',name:'Past — simple, continuous, perfect',tag:'key'},
+      {id:'gr_2c',name:'Future — will vs going to'},
+      {id:'gr_2d',name:'Subject-Verb Agreement',tag:'key'},
+      {id:'gr_2e',name:'Active vs Passive Voice',tag:'key'},
+    ]},
+    { name:'Phase 3 — Clauses & Conditionals', items:[
+      {id:'gr_3a',name:'Independent vs dependent clauses'},
+      {id:'gr_3b',name:'Relative clauses — who, which, that'},
+      {id:'gr_3c',name:'Adverb clauses'},
+      {id:'gr_3d',name:'Conditionals — zero, first, second, third',tag:'key'},
+      {id:'gr_3e',name:'Modal verbs — can, could, must, should',tag:'key'},
+    ]},
+    { name:'Phase 4 — Advanced Grammar', items:[
+      {id:'gr_4a',name:'Prepositions — time, place, movement, fixed phrases'},
+      {id:'gr_4b',name:'Reported speech — statements, questions, commands'},
+      {id:'gr_4c',name:'Linking devices — however, therefore, moreover'},
+    ]},
+    { name:'Phase 5 — Near-Native', items:[
+      {id:'gr_5a',name:'Parallel structure'},
+      {id:'gr_5b',name:'Emphasis & inversion — Not only… but also'},
+      {id:'gr_5c',name:'Common Indian-English mistakes to avoid',tag:'key'},
+    ]},
+  ]},
+
+  { id:'practice', label:'Practice', sections:[
+    { name:'Weekly Minimum', items:[
+      {id:'pr_w1',name:'5 SQL problems (LeetCode / StrataScratch)',tag:'key'},
+      {id:'pr_w2',name:'5 Python problems (LeetCode / HackerRank)'},
+      {id:'pr_w3',name:'2 business case questions',tag:'key'},
+      {id:'pr_w4',name:'1 system design question'},
+    ]},
+    { name:'Recommended Platforms', items:[
+      {id:'pr_p1',name:'LeetCode — SQL Medium & Hard'},
+      {id:'pr_p2',name:'StrataScratch — real company interview questions',tag:'key'},
+      {id:'pr_p3',name:'Interview Query — SQL + Python + business cases',tag:'key'},
+      {id:'pr_p4',name:'Mode Analytics SQL tutorial'},
+      {id:'pr_p5',name:'Kaggle notebooks — EDA practice'},
+      {id:'pr_p6',name:'Glassdoor — company-specific questions'},
+    ]},
+    { name:'Mock Interviews & Communication', items:[
+      {id:'pr_m1',name:'Explain solutions aloud while coding',tag:'key'},
+      {id:'pr_m2',name:'Practice structured STAR answers'},
+      {id:'pr_m3',name:'Ask clarifying questions before solving',tag:'key'},
+      {id:'pr_m4',name:'Summarize insights clearly at the end'},
+    ]},
+  ]},
+];
+
+// ══════════════════════════════════════════════════════════════
+//  STORAGE KEY  (separate from Omkar's tracker)
+// ══════════════════════════════════════════════════════════════
+const SK = 'mugdha_prep_v1';
+
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+let state = loadState();
+let activePhase = PHASES[0].id;
+let activeView  = 'tracker';
+let activeFilters = new Set();
+let undoStack   = [];
+let timerInterval = null;
+let timerRunning  = false;
+let timerSeconds  = 0;
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SK) || '{}');
+    return {
+      done:    s.done    || {},
+      notes:   s.notes   || {},
+      custom:  s.custom  || [],
+      theme:   s.theme   || 'auto',
+      timer:   s.timer   || { today: 0, allTime: 0, lastDate: '' },
+      history: s.history || {},
+    };
+  } catch { return { done:{}, notes:{}, custom:[], theme:'auto', timer:{today:0,allTime:0,lastDate:''}, history:{} }; }
+}
+
+function saveState() {
+  localStorage.setItem(SK, JSON.stringify(state));
+}
+
+// ══════════════════════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════════════════════
+function applyTheme(t) {
+  state.theme = t;
+  if (t === 'dark')  document.documentElement.setAttribute('data-theme','dark');
+  else if (t === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+  document.getElementById('menu-theme-val').textContent = t;
+  document.getElementById('menu-theme-icon').textContent = t==='dark'?'●':t==='light'?'○':'◑';
+  saveState();
+}
+applyTheme(state.theme);
+
+// ══════════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════════
+function allItems() {
+  const arr = [];
+  PHASES.forEach(p => p.sections.forEach(s => s.items.forEach(it => arr.push({...it, phase:p.id, phaseLabel:p.label, section:s.name}))));
+  state.custom.forEach(it => arr.push(it));
+  return arr;
+}
+
+function svgCheck() {
+  return `<svg class="checkmark" width="10" height="10" viewBox="0 0 10 10" fill="none">
+    <path d="M2 5.5L4.2 7.8L8 3" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function tagHtml(tag) {
+  if (!tag) return '';
+  const cls = tag==='key'?'tag-key':tag==='easy'?'tag-easy':'tag-med';
+  return `<span class="tag ${cls}">${tag}</span>`;
+}
+
+function buildItem(it) {
+  const done = !!state.done[it.id];
+  const note = state.notes[it.id] || '';
+  const noteOn = note ? ' note-on' : '';
+  return `<div class="item${done?' done':''}${note?' has-note':''}" data-id="${it.id}">
+    <div class="item-check">${svgCheck()}</div>
+    <div class="item-body">
+      <div class="item-name">${it.name}${tagHtml(it.tag)}</div>
+      ${it.meta ? `<div class="item-meta">${it.meta}</div>` : ''}
+      <div class="item-note-area${note?' open':''}">
+        <textarea class="item-note" placeholder="Add a note…">${note}</textarea>
+        <div class="note-saved">saved</div>
+      </div>
+    </div>
+    <div class="item-actions">
+      <button class="item-action note-act${noteOn}" title="Note">✎</button>
+      <button class="item-action del-act" title="Delete">✕</button>
+    </div>
+  </div>`;
+}
+
+function buildSection(sec) {
+  const total = sec.items.length;
+  const done  = sec.items.filter(it => state.done[it.id]).length;
+  return `<div class="section">
+    <div class="section-header">
+      <span class="section-chevron">▾</span>
+      ${sec.name}
+      <span class="section-badge">${done}/${total}</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+        ${sec.items.map(buildItem).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════════════
+function render() {
+  renderPhaseTabs();
+  renderPhases();
+  renderStats();
+  renderChart();
+}
+
+function renderPhaseTabs() {
+  const container = document.getElementById('phase-tabs');
+  container.innerHTML = PHASES.map(p => {
+    const items = allItems().filter(it => it.phase === p.id);
+    const total = items.length;
+    const done  = items.filter(it => state.done[it.id]).length;
+    const allDone = total > 0 && done === total;
+    return `<button class="phase-tab${p.id===activePhase?' active':''}${allDone?' all-done':''}" data-phase="${p.id}">
+      ${p.label} <span class="tab-badge">${allDone?'✓':`${done}/${total}`}</span>
+    </button>`;
+  }).join('');
+  container.querySelectorAll('.phase-tab').forEach(btn => {
+    btn.addEventListener('click', () => { activePhase = btn.dataset.phase; render(); });
+  });
+}
+
+function renderPhases() {
+  const container = document.getElementById('phases-container');
+  container.innerHTML = PHASES.map(p => {
+    const secs = p.sections.map(buildSection).join('');
+    const customItems = state.custom.filter(it => it.phase === p.id);
+    const customSec = customItems.length ? buildSection({name:'Custom', items:customItems}) : '';
+    return `<div class="phase${p.id===activePhase?' visible':''}" id="phase-${p.id}">${secs}${customSec}</div>`;
+  }).join('');
+  bindItemEvents(container);
+  bindSectionToggle(container);
+}
+
+function bindSectionToggle(root) {
+  root.querySelectorAll('.section-header').forEach(hdr => {
+    hdr.addEventListener('click', () => hdr.closest('.section').classList.toggle('collapsed'));
+  });
+}
+
+function bindItemEvents(root) {
+  root.querySelectorAll('.item').forEach(el => {
+    const id = el.dataset.id;
+    el.addEventListener('click', e => {
+      if (e.target.closest('.item-action') || e.target.closest('.item-note-area')) return;
+      toggleDone(id, el);
+    });
+    const noteBtn = el.querySelector('.note-act');
+    const noteArea = el.querySelector('.item-note-area');
+    const noteEl   = el.querySelector('.item-note');
+    const noteSaved = el.querySelector('.note-saved');
+    if (noteBtn) noteBtn.addEventListener('click', e => { e.stopPropagation(); noteArea.classList.toggle('open'); if(noteArea.classList.contains('open')) noteEl.focus(); });
+    if (noteEl) {
+      let saveTimer;
+      noteEl.addEventListener('input', () => {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          state.notes[id] = noteEl.value;
+          saveState();
+          el.classList.toggle('has-note', !!noteEl.value);
+          noteBtn.classList.toggle('note-on', !!noteEl.value);
+          noteSaved.classList.add('show');
+          setTimeout(() => noteSaved.classList.remove('show'), 1200);
+        }, 600);
+      });
+    }
+    const delBtn = el.querySelector('.del-act');
+    if (delBtn) delBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const idx = state.custom.findIndex(c => c.id === id);
+      if (idx >= 0) { const removed = state.custom.splice(idx, 1)[0]; saveState(); render(); showToast(`Deleted "${removed.name}"`, () => { state.custom.push(removed); saveState(); render(); }); }
+    });
+  });
+}
+
+function toggleDone(id, el) {
+  const was = !!state.done[id];
+  if (was) { delete state.done[id]; } else { state.done[id] = Date.now(); recordHistory(); }
+  saveState();
+  el.classList.toggle('done', !was);
+  renderStats();
+  renderPhaseTabs();
+  if (!was) renderChart();
+}
+
+function recordHistory() {
+  const today = new Date().toISOString().slice(0,10);
+  state.history[today] = (state.history[today] || 0) + 1;
+}
+
+function renderStats() {
+  const items = allItems();
+  const total = items.length;
+  const done  = items.filter(it => state.done[it.id]).length;
+  const pct   = total ? Math.round(done/total*100) : 0;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-done').textContent  = done;
+  document.getElementById('s-pct').textContent   = pct + '%';
+  document.getElementById('s-rem').textContent   = total - done;
+  document.getElementById('s-bar').style.width   = pct + '%';
+}
+
+function renderChart() {
+  const bars = document.getElementById('chart-bars');
+  const days = [];
+  const today = new Date();
+  for (let i=6; i>=0; i--) {
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    days.push(d.toISOString().slice(0,10));
+  }
+  const max = Math.max(1, ...days.map(d => state.history[d]||0));
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  bars.innerHTML = days.map(d => {
+    const count = state.history[d]||0;
+    const todayStr = today.toISOString().slice(0,10);
+    const isToday = d === todayStr;
+    const h = count ? Math.round((count/max)*52) : 3;
+    return `<div class="chart-col">
+      <div class="chart-count">${count||''}</div>
+      <div class="chart-bar-wrap"><div class="chart-bar${count?' has-data':''}${isToday?' today':''}" style="height:${h}px"></div></div>
+      <div class="chart-day${isToday?' today':''}">${dayNames[new Date(d+'T12:00:00').getDay()]}</div>
+    </div>`;
+  }).join('');
+  const weekTotal = days.reduce((s,d) => s+(state.history[d]||0), 0);
+  document.getElementById('chart-total').textContent = weekTotal ? `${weekTotal} this week` : '';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════════════════════
+function doSearch(q) {
+  const normalView = document.getElementById('normal-view');
+  const searchRes  = document.getElementById('search-results');
+  const info = document.getElementById('search-info');
+  if (!q) {
+    normalView.style.display=''; searchRes.style.display='none'; info.textContent=''; return;
+  }
+  normalView.style.display='none'; searchRes.style.display='';
+  const ql = q.toLowerCase();
+  const matches = allItems().filter(it => it.name.toLowerCase().includes(ql) || (it.meta||'').toLowerCase().includes(ql));
+  info.textContent = `${matches.length} result${matches.length!==1?'s':''} for "${q}"`;
+  const byPhase = {};
+  matches.forEach(it => { (byPhase[it.phase] = byPhase[it.phase]||{label:it.phaseLabel,items:[]}).items.push(it); });
+  const hi = s => s.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), m=>`<mark>${m}</mark>`);
+  searchRes.innerHTML = Object.values(byPhase).map(g => `
+    <div class="search-group">
+      <div class="search-group-hdr"><em>${g.label}</em></div>
+      ${g.items.map(it => {
+        const done = !!state.done[it.id];
+        return `<div class="item${done?' done':''}" data-id="${it.id}" style="cursor:pointer">
+          <div class="item-check">${svgCheck()}</div>
+          <div class="item-body"><div class="item-name">${hi(it.name)}${tagHtml(it.tag)}</div>${it.meta?`<div class="item-meta">${hi(it.meta)}</div>`:''}</div>
+        </div>`;
+      }).join('')}
+    </div>`).join('') || '<div style="color:var(--text3);font-size:13px;padding:1rem 0;">No results found</div>';
+  searchRes.querySelectorAll('.item').forEach(el => {
+    el.addEventListener('click', () => {
+      toggleDone(el.dataset.id, el);
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FILTERS
+// ══════════════════════════════════════════════════════════════
+function applyFilters() {
+  if (!activeFilters.size) { document.querySelectorAll('.item').forEach(el => el.style.display=''); return; }
+  document.querySelectorAll('.item').forEach(el => {
+    const id = el.dataset.id;
+    const it = allItems().find(i => i.id===id);
+    if (!it) return;
+    let show = false;
+    if (activeFilters.has('key')    && it.tag==='key') show=true;
+    if (activeFilters.has('easy')   && it.tag==='easy') show=true;
+    if (activeFilters.has('med')    && it.tag==='med') show=true;
+    if (activeFilters.has('done')   && state.done[id]) show=true;
+    if (activeFilters.has('undone') && !state.done[id]) show=true;
+    el.style.display = show ? '' : 'none';
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TIMER
+// ══════════════════════════════════════════════════════════════
+function checkTimerDate() {
+  const today = new Date().toISOString().slice(0,10);
+  if (state.timer.lastDate !== today) { state.timer.today = 0; state.timer.lastDate = today; saveState(); }
+}
+checkTimerDate();
+
+function updateTimerUI() {
+  const h = String(Math.floor(timerSeconds/3600)).padStart(2,'0');
+  const m = String(Math.floor((timerSeconds%3600)/60)).padStart(2,'0');
+  const s = String(timerSeconds%60).padStart(2,'0');
+  const disp = document.getElementById('timer-disp');
+  disp.textContent = `${h}:${m}:${s}`;
+  disp.classList.toggle('running', timerRunning);
+  const fmt = sec => `${Math.floor(sec/3600)}h ${Math.floor((sec%3600)/60)}m`;
+  document.getElementById('timer-today').textContent = fmt(state.timer.today + timerSeconds);
+  document.getElementById('timer-all').textContent   = fmt(state.timer.allTime + timerSeconds);
+}
+
+document.getElementById('timer-start').addEventListener('click', () => {
+  if (timerRunning) {
+    timerRunning = false;
+    clearInterval(timerInterval);
+    state.timer.today   += timerSeconds;
+    state.timer.allTime += timerSeconds;
+    timerSeconds = 0;
+    saveState();
+    document.getElementById('timer-start').textContent = '▶ Start';
+    document.getElementById('timer-start').classList.add('start');
+  } else {
+    timerRunning = true;
+    timerInterval = setInterval(() => { timerSeconds++; updateTimerUI(); }, 1000);
+    document.getElementById('timer-start').textContent = '⏸ Pause';
+    document.getElementById('timer-start').classList.add('start');
+  }
+  updateTimerUI();
+});
+document.getElementById('timer-reset').addEventListener('click', () => {
+  clearInterval(timerInterval); timerRunning=false; timerSeconds=0;
+  document.getElementById('timer-start').textContent='▶ Start';
+  updateTimerUI();
+});
+updateTimerUI();
+
+// ══════════════════════════════════════════════════════════════
+//  COUNTDOWN
+// ══════════════════════════════════════════════════════════════
+(function() {
+  const now = new Date();
+  const yr = now.getFullYear();
+  const targets = [new Date(yr,8,1), new Date(yr+1,8,1)];
+  const target = targets.find(t => t > now) || targets[1];
+  const diff = Math.ceil((target-now)/(1000*60*60*24));
+  document.getElementById('countdown').innerHTML = `<span>${diff}</span> days to go`;
+})();
+
+// ══════════════════════════════════════════════════════════════
+//  ADD CUSTOM TOPIC
+// ══════════════════════════════════════════════════════════════
+document.getElementById('add-btn').addEventListener('click', () => {
+  const name = document.getElementById('add-name').value.trim();
+  if (!name) return;
+  const phase   = document.getElementById('add-phase').value;
+  const meta    = document.getElementById('add-meta').value.trim();
+  const section = document.getElementById('add-section').value.trim() || 'Custom';
+  const tag     = document.getElementById('add-tag').value || undefined;
+  const id = 'c_' + Date.now();
+  const ph = PHASES.find(p=>p.id===phase);
+  state.custom.push({id, name, meta, tag, phase, phaseLabel: ph?ph.label:phase, section});
+  saveState(); render();
+  document.getElementById('add-name').value='';
+  document.getElementById('add-meta').value='';
+  document.getElementById('add-section').value='';
+  document.getElementById('add-tag').value='';
+  showToast(`Added "${name}"`);
+});
+
+// ══════════════════════════════════════════════════════════════
+//  SEARCH WIRING
+// ══════════════════════════════════════════════════════════════
+const searchInput = document.getElementById('search-input');
+const searchClear = document.getElementById('search-clear');
+searchInput.addEventListener('input', () => {
+  searchClear.classList.toggle('vis', !!searchInput.value);
+  doSearch(searchInput.value.trim());
+});
+searchClear.addEventListener('click', () => { searchInput.value=''; searchClear.classList.remove('vis'); doSearch(''); });
+
+// ══════════════════════════════════════════════════════════════
+//  FILTER CHIPS
+// ══════════════════════════════════════════════════════════════
+document.querySelectorAll('.filter-chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = btn.dataset.f;
+    if (activeFilters.has(f)) { activeFilters.delete(f); btn.classList.remove('on'); }
+    else { activeFilters.add(f); btn.classList.add('on'); }
+    applyFilters();
+  });
+});
+
+// ══════════════════════════════════════════════════════════════
+//  VIEW TABS
+// ══════════════════════════════════════════════════════════════
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    activeView = tab.dataset.view;
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t===tab));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('visible', v.id==='view-'+activeView));
+  });
+});
+
+// ══════════════════════════════════════════════════════════════
+//  MENU
+// ══════════════════════════════════════════════════════════════
+const menuBtn  = document.getElementById('menu-btn');
+const menuDrop = document.getElementById('menu-dropdown');
+menuBtn.addEventListener('click', e => { e.stopPropagation(); menuDrop.classList.toggle('open'); });
+document.addEventListener('click', () => menuDrop.classList.remove('open'));
+
+document.getElementById('menu-theme').addEventListener('click', () => {
+  const cycle = {auto:'dark',dark:'light',light:'auto'};
+  applyTheme(cycle[state.theme]||'auto');
+});
+
+document.getElementById('menu-export').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`mugdha_prep_${new Date().toISOString().slice(0,10)}.json`; a.click();
+});
+
+document.getElementById('import-file').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try { const imported = JSON.parse(ev.target.result); Object.assign(state, imported); saveState(); render(); showToast('Progress imported'); }
+    catch { showToast('Import failed — invalid file'); }
+  };
+  reader.readAsText(file); e.target.value='';
+});
+
+document.getElementById('menu-kbd').addEventListener('click', () => {
+  showToast('/ search  ·  S timer  ·  1–9 phases  ·  Esc clear', null, 4000);
+});
+
+document.getElementById('menu-reset').addEventListener('click', () => {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    state.done={}; state.notes={}; state.custom={}; state.history={};
+    state.timer={today:0,allTime:0,lastDate:''}; saveState(); render(); showToast('Progress reset');
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg, undoFn, duration=3000) {
+  const toast  = document.getElementById('toast');
+  const msgEl  = document.getElementById('toast-msg');
+  const undoEl = document.getElementById('toast-undo');
+  const progEl = document.getElementById('toast-prog');
+  msgEl.textContent = msg;
+  undoEl.style.display = undoFn ? '' : 'none';
+  if (undoFn) { undoEl.onclick = () => { undoFn(); toast.classList.remove('vis'); }; }
+  toast.classList.add('vis');
+  progEl.style.transition='none'; progEl.style.width='100%';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    progEl.style.transition=`width ${duration}ms linear`; progEl.style.width='0%';
+  }));
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('vis'), duration);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ══════════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA') {
+    if (e.key==='Escape') e.target.blur();
+    return;
+  }
+  if (e.key==='/') { e.preventDefault(); searchInput.focus(); }
+  if (e.key==='s' || e.key==='S') document.getElementById('timer-start').click();
+  if (e.key==='Escape') { searchInput.value=''; doSearch(''); searchClear.classList.remove('vis'); }
+  const idx = parseInt(e.key)-1;
+  if (idx>=0 && idx<PHASES.length) { activePhase=PHASES[idx].id; render(); }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
